@@ -486,7 +486,7 @@
         message: form.message.value.trim()
       };
       try{
-        const res = await fetch('https://starkautomate.stark-swiss80.workers.dev', {
+        const res = await fetch('/', {
           method: 'POST',
           headers: {'Content-Type':'application/json'},
           body: JSON.stringify(data)
