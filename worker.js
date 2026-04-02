@@ -9,11 +9,12 @@ addEventListener('fetch', event => {
 })
 
 async function handle(request){
+  const url = new URL(request.url);
   if(request.method === 'OPTIONS'){
     return new Response(null, {status:204, headers: CORS})
   }
-  if(request.method !== 'POST'){
-    return new Response(JSON.stringify({error:'Only POST allowed'}), {status:405, headers:{...CORS,'Content-Type':'application/json'}})
+  if(url.pathname !== '/api' || request.method !== 'POST'){
+    return new Response(null, {status:404})
   }
   try{
     const data = await request.json();
