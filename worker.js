@@ -1,10 +1,19 @@
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+};
+
 addEventListener('fetch', event => {
   event.respondWith(handle(event.request))
 })
 
 async function handle(request){
+  if(request.method === 'OPTIONS'){
+    return new Response(null, {status:204, headers: CORS})
+  }
   if(request.method !== 'POST'){
-    return new Response(JSON.stringify({error:'Only POST allowed'}), {status:405, headers:{'Content-Type':'application/json'}})
+    return new Response(JSON.stringify({error:'Only POST allowed'}), {status:405, headers:{...CORS,'Content-Type':'application/json'}})
   }
   try{
     const data = await request.json();
@@ -18,19 +27,19 @@ async function handle(request){
     const message = sanitize(data.message || '');
 
     if(!name || !company){
-      return new Response(JSON.stringify({error:'Missing required fields'}), {status:400, headers:{'Content-Type':'application/json'}})
+      return new Response(JSON.stringify({error:'Missing required fields'}), {status:400, headers:{...CORS,'Content-Type':'application/json'}})
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if(email && !emailRegex.test(email)){
-      return new Response(JSON.stringify({error:'Invalid email address'}), {status:400, headers:{'Content-Type':'application/json'}})
+      return new Response(JSON.stringify({error:'Invalid email address'}), {status:400, headers:{...CORS,'Content-Type':'application/json'}})
     }
 
     // TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must be set as environment secrets
     const BOT = TELEGRAM_BOT_TOKEN;
     const CHAT = TELEGRAM_CHAT_ID;
     if(!BOT || !CHAT){
-      return new Response(JSON.stringify({error:'Server not configured'}), {status:500, headers:{'Content-Type':'application/json'}})
+      return new Response(JSON.stringify({error:'Server not configured'}), {status:500, headers:{...CORS,'Content-Type':'application/json'}})
     }
 
     const text = `<b>New Enquiry</b>\nName: ${escapeHtml(name)}\nTitle: ${escapeHtml(title)}\nCompany: ${escapeHtml(company)}\nEmail: ${escapeHtml(email)}\nPhone: ${escapeHtml(dialCode)} ${escapeHtml(phone)}\nSubject: ${escapeHtml(subject)}\nMessage: ${escapeHtml(message)}`;
@@ -43,12 +52,12 @@ async function handle(request){
 
     const j = await resp.json();
     if(!j.ok){
-      return new Response(JSON.stringify({error:'Telegram error', details:j}), {status:502, headers:{'Content-Type':'application/json'}})
+      return new Response(JSON.stringify({error:'Telegram error', details:j}), {status:502, headers:{...CORS,'Content-Type':'application/json'}})
     }
 
-    return new Response(JSON.stringify({ok:true}), {status:200, headers:{'Content-Type':'application/json'}})
+    return new Response(JSON.stringify({ok:true}), {status:200, headers:{...CORS,'Content-Type':'application/json'}})
   }catch(err){
-    return new Response(JSON.stringify({error:'Bad request', details:String(err)}), {status:400, headers:{'Content-Type':'application/json'}})
+    return new Response(JSON.stringify({error:'Bad request', details:String(err)}), {status:400, headers:{...CORS,'Content-Type':'application/json'}})
   }
 }
 
