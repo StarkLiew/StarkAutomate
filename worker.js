@@ -11,11 +11,19 @@ async function handle(request){
     const name = sanitize(data.name);
     const title = sanitize(data.title || '');
     const company = sanitize(data.company);
+    const email = sanitize(data.email || '');
+    const dialCode = sanitize(data.dialCode || '');
+    const phone = sanitize(data.phone || '');
     const subject = sanitize(data.subject || 'service');
     const message = sanitize(data.message || '');
 
     if(!name || !company){
       return new Response(JSON.stringify({error:'Missing required fields'}), {status:400, headers:{'Content-Type':'application/json'}})
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if(email && !emailRegex.test(email)){
+      return new Response(JSON.stringify({error:'Invalid email address'}), {status:400, headers:{'Content-Type':'application/json'}})
     }
 
     // TELEGRAM_BOT_TOKEN and TELEGRAM_CHAT_ID must be set as environment secrets
@@ -25,7 +33,7 @@ async function handle(request){
       return new Response(JSON.stringify({error:'Server not configured'}), {status:500, headers:{'Content-Type':'application/json'}})
     }
 
-    const text = `<b>New Enquiry</b>\nName: ${escapeHtml(name)}\nTitle: ${escapeHtml(title)}\nCompany: ${escapeHtml(company)}\nSubject: ${escapeHtml(subject)}\nMessage: ${escapeHtml(message)}`;
+    const text = `<b>New Enquiry</b>\nName: ${escapeHtml(name)}\nTitle: ${escapeHtml(title)}\nCompany: ${escapeHtml(company)}\nEmail: ${escapeHtml(email)}\nPhone: ${escapeHtml(dialCode)} ${escapeHtml(phone)}\nSubject: ${escapeHtml(subject)}\nMessage: ${escapeHtml(message)}`;
 
     const resp = await fetch(`https://api.telegram.org/bot${BOT}/sendMessage`, {
       method: 'POST',

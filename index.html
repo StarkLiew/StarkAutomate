@@ -268,6 +268,9 @@
       cursor:pointer;transition:transform .2s,box-shadow .2s;
     }
     button:hover{transform:scale(1.03);box-shadow:var(--glow)}
+    .phone-row{display:flex;gap:8px}
+    .phone-row select{width:136px;flex-shrink:0}
+    .phone-row input{flex:1}
 
     .muted{color:var(--muted)}
 
@@ -362,6 +365,31 @@
             <label for="company">Company name</label>
             <input id="company" name="company" required placeholder="e.g. ABC Clinic">
 
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" required placeholder="e.g. lina@abcclinic.com">
+
+            <label for="phone">Phone number</label>
+            <div class="phone-row">
+              <select id="dialCode" name="dialCode" aria-label="International dialling code">
+                <option value="+60">🇲🇾 +60</option>
+                <option value="+65">🇸🇬 +65</option>
+                <option value="+61">🇦🇺 +61</option>
+                <option value="+86">🇨🇳 +86</option>
+                <option value="+44">🇬🇧 +44</option>
+                <option value="+62">🇮🇩 +62</option>
+                <option value="+91">🇮🇳 +91</option>
+                <option value="+81">🇯🇵 +81</option>
+                <option value="+855">🇰🇭 +855</option>
+                <option value="+95">🇲🇲 +95</option>
+                <option value="+63">🇵🇭 +63</option>
+                <option value="+82">🇰🇷 +82</option>
+                <option value="+66">🇹🇭 +66</option>
+                <option value="+1">🇺🇸 +1</option>
+                <option value="+84">🇻🇳 +84</option>
+              </select>
+              <input id="phone" name="phone" type="tel" placeholder="e.g. 12 345 6789">
+            </div>
+
             <label for="subject">Subject</label>
             <select id="subject" name="subject">
               <option value="service">Service Enquiry</option>
@@ -438,6 +466,9 @@
         name: form.name.value.trim(),
         title: form.title.value.trim(),
         company: form.company.value.trim(),
+        email: form.email.value.trim(),
+        dialCode: form.dialCode.value,
+        phone: form.phone.value.trim(),
         subject: form.subject.value,
         message: form.message.value.trim()
       };
