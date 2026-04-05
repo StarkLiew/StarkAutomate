@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Stark Automate Solutions</title>
   <meta name="description" content="Automation and AI solutions for SMEs in KL, Johor Bahru and Singapore">
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -300,9 +301,171 @@
       border-top:1px solid var(--border);padding-top:24px;
     }
 
+    /* Case Studies grid */
+    .case-grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:16px;
+      margin-top:20px;
+    }
+    .case-card{
+      background:var(--bg2);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:20px;
+      opacity:0;
+      transform:translateY(20px);
+      transition:opacity .5s ease,transform .5s ease,border-color .25s,box-shadow .25s;
+    }
+    .workflow-step.visible .case-card{opacity:1;transform:translateY(0)}
+    .workflow-step.visible .case-card:nth-child(1){transition-delay:.1s}
+    .workflow-step.visible .case-card:nth-child(2){transition-delay:.2s}
+    .workflow-step.visible .case-card:nth-child(3){transition-delay:.3s}
+    .workflow-step.visible .case-card:nth-child(4){transition-delay:.4s}
+    .workflow-step.visible .case-card:nth-child(5){transition-delay:.5s}
+    .workflow-step.visible .case-card:nth-child(6){transition-delay:.6s}
+    .case-card:hover{
+      border-color:var(--accent2);
+      box-shadow:0 0 18px rgba(168,85,247,0.25);
+    }
+    .case-header{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      margin-bottom:10px;
+    }
+    .case-icon{
+      font-size:1.6rem;
+      line-height:1;
+      flex-shrink:0;
+    }
+    .case-meta{
+      flex:1;
+    }
+    .case-meta h4{
+      font-family:'Orbitron',monospace;
+      font-size:0.85rem;
+      color:var(--text);
+      margin:0 0 4px;
+    }
+    .case-tag{
+      display:inline-block;
+      font-size:0.72rem;
+      font-weight:600;
+      padding:2px 8px;
+      border-radius:20px;
+      background:linear-gradient(135deg,rgba(168,85,247,0.2),rgba(0,240,255,0.1));
+      border:1px solid rgba(168,85,247,0.35);
+      color:var(--accent2);
+      letter-spacing:.4px;
+    }
+    .case-desc{
+      font-size:0.88rem;
+      color:var(--muted);
+      margin:0 0 10px;
+      line-height:1.55;
+    }
+    .case-outcome{
+      font-size:0.85rem;
+      background:linear-gradient(135deg,rgba(0,240,255,0.07),rgba(168,85,247,0.05));
+      border-left:3px solid var(--accent);
+      border-radius:0 8px 8px 0;
+      padding:8px 12px;
+      color:var(--text);
+    }
+    .case-outcome strong{color:var(--accent)}
+
+    /* Testimonials */
+    .testi-grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:16px;
+      margin-top:20px;
+    }
+    .testi-card{
+      background:var(--bg2);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:22px 22px 18px;
+      position:relative;
+      opacity:0;
+      transform:translateY(20px);
+      transition:opacity .5s ease,transform .5s ease,border-color .25s,box-shadow .25s;
+    }
+    .workflow-step.visible .testi-card{opacity:1;transform:translateY(0)}
+    .workflow-step.visible .testi-card:nth-child(1){transition-delay:.1s}
+    .workflow-step.visible .testi-card:nth-child(2){transition-delay:.25s}
+    .workflow-step.visible .testi-card:nth-child(3){transition-delay:.4s}
+    .testi-card:hover{
+      border-color:var(--accent2);
+      box-shadow:0 0 18px rgba(168,85,247,0.2);
+    }
+    .testi-quote{
+      font-size:2.4rem;
+      line-height:1;
+      color:var(--accent);
+      opacity:0.35;
+      position:absolute;
+      top:14px;
+      left:18px;
+      font-family:'Orbitron',monospace;
+    }
+    .testi-text{
+      font-size:0.9rem;
+      color:var(--text);
+      line-height:1.6;
+      margin:18px 0 16px;
+      padding-left:4px;
+      font-style:italic;
+    }
+    .testi-author{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      border-top:1px solid var(--border);
+      padding-top:12px;
+    }
+    .testi-avatar{
+      width:40px;height:40px;
+      border-radius:50%;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:flex;align-items:center;justify-content:center;
+      font-size:1rem;
+      flex-shrink:0;
+      font-weight:700;
+      color:#0a0a0f;
+      font-family:'Orbitron',monospace;
+    }
+    .testi-info{flex:1}
+    .testi-name{
+      font-weight:600;
+      font-size:0.9rem;
+      color:var(--text);
+    }
+    .testi-role{
+      font-size:0.78rem;
+      color:var(--muted);
+      margin-top:2px;
+    }
+    .testi-location{
+      font-size:0.72rem;
+      font-weight:600;
+      padding:2px 8px;
+      border-radius:20px;
+      background:linear-gradient(135deg,rgba(0,240,255,0.12),rgba(168,85,247,0.08));
+      border:1px solid rgba(0,240,255,0.25);
+      color:var(--accent);
+      letter-spacing:.4px;
+      white-space:nowrap;
+    }
+    @media(min-width:800px){
+      .testi-grid{grid-template-columns:repeat(3,1fr)}
+    }
+
     @media(min-width:800px){
       .grid{grid-template-columns:2fr 1fr}
       .hero h1{font-size:2.8rem}
+      .case-grid{grid-template-columns:1fr 1fr}
     }
   </style>
 </head>
@@ -322,7 +485,7 @@
     <main>
       <section id="home" class="hero">
         <h1>Automation & AI</h1>
-        <p class="muted">Empowering SME owners in services, clinics, logistics and F&B to break free from manual operations and manpower constraints — across Kuala Lumpur, Johor Bahru and Singapore.</p>
+        <p class="muted">Empowering SME owners in services, clinics, logistics and F&B to break free from manual operations and manpower constraints, across Kuala Lumpur, Johor Bahru and Singapore.</p>
       </section>
 
       <!-- Workflow Timeline -->
@@ -359,14 +522,142 @@
           </div>
         </div>
 
-        <div class="workflow-step" id="career">
+        <div class="workflow-step" id="cases">
           <span class="step-number">03</span>
+          <h2><span class="step-icon">📋</span> Industry Cases</h2>
+          <div class="case-grid">
+
+            <div class="case-card">
+              <div class="case-header">
+                <div class="case-icon">🏥</div>
+                <div class="case-meta">
+                  <h4>Clinic &amp; Salon</h4>
+                  <span class="case-tag">Appointment Reminder</span>
+                </div>
+              </div>
+              <p class="case-desc">No-shows and last-minute cancellations were draining revenue. Staff spent hours making manual reminder calls with inconsistent follow-through.</p>
+              <div class="case-outcome"><strong>Solution:</strong> Automated WhatsApp &amp; SMS reminders sent 24 h and 2 h before appointments, with one-tap reschedule link — zero manual effort.<br><strong>Result:</strong> 40 % drop in no-shows; front-desk time freed for higher-value tasks.</div>
+            </div>
+
+            <div class="case-card">
+              <div class="case-header">
+                <div class="case-icon">🧾</div>
+                <div class="case-meta">
+                  <h4>Human Resources</h4>
+                  <span class="case-tag">Claim Submission &amp; Approval</span>
+                </div>
+              </div>
+              <p class="case-desc">Paper-based expense claims took weeks to process, caused payroll delays and resulted in lost receipts with no audit trail.</p>
+              <div class="case-outcome"><strong>Solution:</strong> Mobile claim form → auto-routed to the correct approver tier → status pushed back to staff → payroll system updated automatically.<br><strong>Result:</strong> Claim cycle cut from 2 weeks to 48 hours; full digital audit trail.</div>
+            </div>
+
+            <div class="case-card">
+              <div class="case-header">
+                <div class="case-icon">🔧</div>
+                <div class="case-meta">
+                  <h4>Workshop (After-Service)</h4>
+                  <span class="case-tag">Data Collection &amp; KPI Dashboard</span>
+                </div>
+              </div>
+              <p class="case-desc">Service job cards were paper-based. Management had no real-time view of technician efficiency, customer satisfaction or bay utilisation.</p>
+              <div class="case-outcome"><strong>Solution:</strong> QR-code after-service form → automatic aggregation → live management dashboard tracking NPS, job cycle time, repeat-fault rate and bay utilisation.<br><strong>Result:</strong> Instant KPI visibility; data-driven scheduling of technician workloads.</div>
+            </div>
+
+            <div class="case-card">
+              <div class="case-header">
+                <div class="case-icon">⛏️</div>
+                <div class="case-meta">
+                  <h4>Mining &amp; Quarry</h4>
+                  <span class="case-tag">Fuel &amp; Machinery Maintenance</span>
+                </div>
+              </div>
+              <p class="case-desc">Manual fuel log books and spreadsheet maintenance schedules led to unplanned machine downtime, inaccurate cost tracking and compliance gaps.</p>
+              <div class="case-outcome"><strong>Solution:</strong> Digital fuel-log capture linked to each machine → automated preventive-maintenance scheduling → SMS alerts dispatched to operators before due dates.<br><strong>Result:</strong> 30 % reduction in unplanned breakdowns; accurate cost-per-operating-hour reporting.</div>
+            </div>
+
+            <div class="case-card">
+              <div class="case-header">
+                <div class="case-icon">🚚</div>
+                <div class="case-meta">
+                  <h4>Logistics</h4>
+                  <span class="case-tag">Order Capture &amp; Round-Robin Assignment</span>
+                </div>
+              </div>
+              <p class="case-desc">Dispatch coordinators manually matched incoming orders to available drivers via WhatsApp group chats, causing delays and uneven workload distribution.</p>
+              <div class="case-outcome"><strong>Solution:</strong> Automated order-intake form → round-robin assignment engine → instant driver notification via WhatsApp with job details and delivery address.<br><strong>Result:</strong> Dispatch time cut from ~15 min to under 60 seconds; fair and transparent fleet workload distribution.</div>
+            </div>
+
+            <div class="case-card">
+              <div class="case-header">
+                <div class="case-icon">💰</div>
+                <div class="case-meta">
+                  <h4>Finance</h4>
+                  <span class="case-tag">Invoice &amp; Payment Workflow Automation</span>
+                </div>
+              </div>
+              <p class="case-desc">Finance teams were manually chasing overdue invoices, keying payment receipts into spreadsheets and reconciling accounts at month-end, prone to errors and delays.</p>
+              <div class="case-outcome"><strong>Solution:</strong> Auto-generated invoices on deal close → scheduled payment reminder sequences → receipt capture via mobile form → auto-reconciliation against outstanding ledger.<br><strong>Result:</strong> DSO (days sales outstanding) reduced by 35 %; month-end closing time cut in half with near-zero manual data entry.</div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="workflow-step">
+          <span class="step-number">04</span>
+          <h2><span class="step-icon">💬</span> What Clients Say</h2>
+          <p style="margin:0 0 4px">Business owners across the region share their experience working with Stark Automate.</p>
+          <div class="testi-grid">
+
+            <div class="testi-card">
+              <div class="testi-quote">&ldquo;</div>
+              <p class="testi-text">Before Stark Automate, my front-desk team was drowning in reminder calls every morning. Now the system handles it automatically and our no-show rate has dropped dramatically. I wish I had done this two years ago.</p>
+              <div class="testi-author">
+                <div class="testi-avatar">NR</div>
+                <div class="testi-info">
+                  <div class="testi-name">Nurul Rashidah</div>
+                  <div class="testi-role">Owner, Serenity Wellness Clinic</div>
+                </div>
+                <span class="testi-location">Kuala Lumpur</span>
+              </div>
+            </div>
+
+            <div class="testi-card">
+              <div class="testi-quote">&ldquo;</div>
+              <p class="testi-text">Our claim approvals used to pile up for weeks and the finance team was always chasing people. Now everything is routed automatically and my staff get updates on their phones. The whole process is transparent and fast.</p>
+              <div class="testi-author">
+                <div class="testi-avatar">DL</div>
+                <div class="testi-info">
+                  <div class="testi-name">Daniel Lim</div>
+                  <div class="testi-role">HR Manager, Meridian Engineering</div>
+                </div>
+                <span class="testi-location">Johor Bahru</span>
+              </div>
+            </div>
+
+            <div class="testi-card">
+              <div class="testi-quote">&ldquo;</div>
+              <p class="testi-text">The round-robin dispatch system completely removed the chaos from our operations. Drivers get assigned within seconds and we have full visibility on every order. It has made a huge difference to our delivery SLA.</p>
+              <div class="testi-author">
+                <div class="testi-avatar">SC</div>
+                <div class="testi-info">
+                  <div class="testi-name">Serene Chua</div>
+                  <div class="testi-role">Operations Director, SwiftFreight Pte Ltd</div>
+                </div>
+                <span class="testi-location">Singapore</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="workflow-step" id="career">
+          <span class="step-number">05</span>
           <h2><span class="step-icon">🚀</span> Scale</h2>
           <p>We're hunting for driven engineers, implementation consultants and ops specialists ready to shape the future of SME automation. Interested? Submit an enquiry with "Career" as subject.</p>
         </div>
 
         <div class="workflow-step" id="enquiry">
-          <span class="step-number">04</span>
+          <span class="step-number">06</span>
           <h2><span class="step-icon">💬</span> Connect</h2>
           <form id="enquiryForm">
             <label for="name">Contact person name</label>
@@ -430,6 +721,7 @@
         <a href="#home">Home</a>
         <a href="#about">About-us</a>
         <a href="#services">Services</a>
+        <a href="#cases">Cases</a>
         <a href="#career">Career</a>
         <a href="#enquiry">Enquiry</a>
       </div>
@@ -493,7 +785,7 @@
         });
         const j = await res.json();
         if(res.ok){
-          status.textContent = 'Thanks — your enquiry has been sent.';
+          status.textContent = 'Thanks you, your enquiry has been sent.';
           form.reset();
         } else {
           status.textContent = j.error || 'Failed to send. Please try again later.';
