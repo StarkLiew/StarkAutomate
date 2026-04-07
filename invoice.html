@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice {{ invoice_number }}</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: 13px;
+      color: #1e293b;
+      background: #f1f5f9;
+    }
+
+    .page {
+      max-width: 860px;
+      margin: 30px auto;
+      background: #ffffff;
+      padding: 52px 56px;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+    }
+
+    /* ── HEADER ─────────────────────────────────── */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding-bottom: 28px;
+      border-bottom: 2px solid #e2e8f0;
+      margin-bottom: 32px;
+    }
+
+    .header-left .logo img {
+      height: 52px;
+      width: auto;
+      display: block;
+    }
+
+    .company-tagline {
+      margin-top: 10px;
+      font-size: 11px;
+      color: #94a3b8;
+      letter-spacing: 0.5px;
+    }
+
+    .header-right { text-align: right; }
+
+    .invoice-badge {
+      display: inline-block;
+      background: #0f172a;
+      color: #ffffff;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      padding: 6px 20px;
+      border-radius: 4px;
+      margin-bottom: 16px;
+    }
+
+    .meta-table { margin-left: auto; border-collapse: collapse; }
+    .meta-table td { padding: 4px 0 4px 18px; font-size: 12.5px; }
+    .meta-table td.label { color: #94a3b8; font-weight: 500; text-align: right; padding-right: 8px; }
+    .meta-table td.value { font-weight: 600; color: #0f172a; text-align: right; }
+    .meta-table tr.highlight td { color: #4f46e5; font-size: 13px; }
+
+    /* ── BILL TO ─────────────────────────────────── */
+    .bill-section {
+      margin-bottom: 32px;
+      display: flex;
+      gap: 0;
+    }
+
+    .bill-box {
+      flex: 1;
+      padding: 20px 24px;
+      background: #f8fafc;
+      border-radius: 8px;
+      border-left: 4px solid #0f172a;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.8px;
+      color: #94a3b8;
+      margin-bottom: 10px;
+    }
+
+    .customer-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+
+    .detail-row {
+      display: flex;
+      gap: 6px;
+      font-size: 12.5px;
+      color: #475569;
+      line-height: 1.8;
+      align-items: baseline;
+    }
+
+    .detail-row .lbl {
+      font-size: 11px;
+      font-weight: 600;
+      color: #94a3b8;
+      min-width: 100px;
+      flex-shrink: 0;
+    }
+
+    /* ── ITEMS TABLE ─────────────────────────────── */
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 0;
+    }
+
+    .items-table thead tr {
+      background: #0f172a;
+      color: #ffffff;
+    }
+
+    .items-table thead th {
+      padding: 12px 16px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.9px;
+    }
+
+    .items-table thead th:first-child { text-align: center; width: 52px; border-radius: 6px 0 0 0; }
+    .items-table thead th:last-child  { text-align: right; border-radius: 0 6px 0 0; }
+
+    .items-table tbody tr { border-bottom: 1px solid #f1f5f9; }
+    .items-table tbody tr:nth-child(even) { background: #fafafe; }
+
+    .items-table tbody td {
+      padding: 13px 16px;
+      font-size: 13px;
+      color: #334155;
+      vertical-align: top;
+    }
+
+    .items-table tbody td:first-child { text-align: center; color: #94a3b8; font-size: 12px; }
+    .items-table tbody td:last-child  { text-align: right; font-weight: 500; white-space: nowrap; }
+
+    /* ── TOTALS ──────────────────────────────────── */
+    .totals-section {
+      display: flex;
+      justify-content: flex-end;
+      border-top: 2px solid #e2e8f0;
+      padding-top: 0;
+      margin-bottom: 32px;
+    }
+
+    .totals-table { width: 300px; border-collapse: collapse; }
+    .totals-table td { padding: 9px 16px; font-size: 13px; }
+
+    .totals-table .t-label  { color: #64748b; }
+    .totals-table .t-value  { text-align: right; font-weight: 500; color: #1e293b; }
+
+    .totals-table tr.divider td { border-top: 1px dashed #e2e8f0; }
+
+    .totals-table tr.grand-row { background: #0f172a; }
+    .totals-table tr.grand-row td {
+      padding: 14px 16px;
+      font-size: 14.5px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+    .totals-table tr.grand-row td:last-child { text-align: right; }
+    .totals-table tr.grand-row td:first-child { border-radius: 0 0 0 6px; }
+    .totals-table tr.grand-row td:last-child  { border-radius: 0 0 6px 0; }
+
+    /* ── REMARKS ─────────────────────────────────── */
+    .remarks-section {
+      margin-bottom: 28px;
+      padding: 16px 20px;
+      background: #fffbeb;
+      border-left: 4px solid #f59e0b;
+      border-radius: 0 6px 6px 0;
+    }
+
+    .remarks-text {
+      font-size: 12.5px;
+      color: #78716c;
+      line-height: 1.7;
+      margin-top: 4px;
+    }
+
+    /* ── PAYMENT ─────────────────────────────────── */
+    .payment-section {
+      padding-top: 24px;
+      border-top: 1px dashed #cbd5e1;
+      margin-bottom: 32px;
+    }
+
+    .payment-grid {
+      display: flex;
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .payment-card {
+      flex: 1;
+      padding: 14px 18px;
+      background: #f8fafc;
+      border-radius: 8px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .pay-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: #94a3b8;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+
+    .pay-value {
+      font-size: 13px;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    /* ── FOOTER ──────────────────────────────────── */
+    .footer {
+      padding-top: 20px;
+      border-top: 1px solid #e2e8f0;
+      text-align: center;
+      font-size: 11px;
+      color: #cbd5e1;
+      line-height: 2;
+    }
+
+    .footer strong { color: #94a3b8; }
+
+    /* ── PRINT / PDF ─────────────────────────────── */
+    @media print {
+      body { background: #fff; }
+      .page {
+        margin: 0;
+        padding: 20px 28px;
+        box-shadow: none;
+        max-width: 100%;
+      }
+    }
+
+    @page {
+      size: A4;
+      margin: 12mm 10mm;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ══ HEADER ══════════════════════════════════════════════════ -->
+  <div class="header">
+
+    <div class="header-left">
+      <div class="logo">
+        <img src="https://starkautomate.com/logo.png" alt="Starkautomate">
+      </div>
+      <div class="company-tagline">Automate Smarter. Grow Faster.</div>
+    </div>
+
+    <div class="header-right">
+      <div class="invoice-badge">INVOICE</div>
+      <table class="meta-table">
+        <tr>
+          <td class="label">Invoice No.</td>
+          <td class="value">{{ invoice_number }}</td>
+        </tr>
+        <tr>
+          <td class="label">Invoice Date</td>
+          <td class="value">{{ invoice_date }}</td>
+        </tr>
+        <tr>
+          <td class="label">Payment Terms</td>
+          <td class="value">Net {{ invoice_due_days }} Days</td>
+        </tr>
+        <tr class="highlight">
+          <td class="label">Due Date</td>
+          <td class="value">{{ invoice_due_date }}</td>
+        </tr>
+      </table>
+    </div>
+
+  </div>
+
+  <!-- ══ BILL TO ══════════════════════════════════════════════════ -->
+  <div class="bill-section">
+    <div class="bill-box">
+      <div class="section-label">Bill To</div>
+      <div class="customer-name">{{ customer_name }}</div>
+      <div class="detail-row"><span class="lbl">Account Code</span> {{ customer_account_code }}</div>
+      <div class="detail-row"><span class="lbl">Address</span> {{ customer_address }}</div>
+      <div class="detail-row"><span class="lbl">Attn</span> {{ contact_person }}</div>
+      <div class="detail-row"><span class="lbl">Phone</span> {{ phone_number }}</div>
+      <div class="detail-row"><span class="lbl">Email</span> {{ email }}</div>
+    </div>
+  </div>
+
+  <!-- ══ ITEMS TABLE ══════════════════════════════════════════════ -->
+  <table class="items-table">
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th style="text-align:left;">Description</th>
+        <th>Amount (MYR)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {{ invoice_lines }}
+      <!-- ─────────────────────────────────────────────────────────
+           In n8n, build each row with a Code node and pass as
+           invoice_lines. Each row template:
+
+           <tr>
+             <td>1</td>
+             <td>Professional service description</td>
+             <td>1,500.00</td>
+           </tr>
+           ───────────────────────────────────────────────────────── -->
+    </tbody>
+  </table>
+
+  <!-- ══ TOTALS ═══════════════════════════════════════════════════ -->
+  <div class="totals-section">
+    <table class="totals-table">
+      <tr>
+        <td class="t-label">Subtotal</td>
+        <td class="t-value">MYR {{ subtotal }}</td>
+      </tr>
+      <tr>
+        <td class="t-label">SST ({{ tax_rate }}%)</td>
+        <td class="t-value">MYR {{ tax_amount }}</td>
+      </tr>
+      <tr class="divider">
+        <td class="t-label">Discount</td>
+        <td class="t-value">– MYR {{ discount_amount }}</td>
+      </tr>
+      <tr class="grand-row">
+        <td>Grand Total</td>
+        <td>MYR {{ grand_total }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- ══ REMARKS ══════════════════════════════════════════════════ -->
+  <div class="remarks-section">
+    <div class="section-label">Remarks</div>
+    <div class="remarks-text">{{ remarks }}</div>
+  </div>
+
+  <!-- ══ PAYMENT DETAILS ══════════════════════════════════════════ -->
+  <div class="payment-section">
+    <div class="section-label">Payment Details</div>
+    <div class="payment-grid">
+      <div class="payment-card">
+        <div class="pay-label">Bank Name</div>
+        <div class="pay-value">{{ bank_name }}</div>
+      </div>
+      <div class="payment-card">
+        <div class="pay-label">Account Name</div>
+        <div class="pay-value">{{ bank_account_name }}</div>
+      </div>
+      <div class="payment-card">
+        <div class="pay-label">Account Number</div>
+        <div class="pay-value">{{ bank_account_number }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FOOTER ═══════════════════════════════════════════════════ -->
+  <div class="footer">
+    This is a computer-generated invoice and does not require a signature.<br>
+    <strong>Stark Automate Solutions</strong> &nbsp;|&nbsp; stark@starkautomate.com<br>
+    Thank you for your business.
+  </div>
+
+</div>
+</body>
+</html>
