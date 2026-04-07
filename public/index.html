@@ -47,11 +47,18 @@
       z-index:100;
     }
     .brand{
+      display:flex;flex-direction:column;align-items:center;gap:4px;
+    }
+    .brand img{
+      height:40px;width:auto;
+    }
+    .brand-tagline{
       font-family:'Orbitron',monospace;
-      font-weight:700;font-size:1.15rem;
+      font-weight:700;font-size:0.75rem;letter-spacing:0.18em;
       background:linear-gradient(90deg,var(--accent),var(--accent2));
       -webkit-background-clip:text;-webkit-text-fill-color:transparent;
       background-clip:text;
+      text-transform:uppercase;
     }
     nav a{
       margin:0 10px;color:var(--muted);text-decoration:none;font-weight:500;
@@ -472,7 +479,10 @@
 <body>
   <div class="container">
     <header>
-      <div class="brand">Stark Automate</div>
+      <div class="brand">
+        <img src="logo.png" alt="Stark">
+        <span class="brand-tagline">Automate</span>
+      </div>
       <nav>
         <a href="#home">Home</a>
         <a href="#about">About-us</a>
@@ -536,7 +546,7 @@
                 </div>
               </div>
               <p class="case-desc">No-shows and last-minute cancellations were draining revenue. Staff spent hours making manual reminder calls with inconsistent follow-through.</p>
-              <div class="case-outcome"><strong>Solution:</strong> Automated WhatsApp &amp; SMS reminders sent 24 h and 2 h before appointments, with one-tap reschedule link — zero manual effort.<br><strong>Result:</strong> 40 % drop in no-shows; front-desk time freed for higher-value tasks.</div>
+              <div class="case-outcome"><strong>After Automatation:</strong>  40 % drop in no-shows; front-desk time freed for higher-value tasks.</div>
             </div>
 
             <div class="case-card">
@@ -548,7 +558,7 @@
                 </div>
               </div>
               <p class="case-desc">Paper-based expense claims took weeks to process, caused payroll delays and resulted in lost receipts with no audit trail.</p>
-              <div class="case-outcome"><strong>Solution:</strong> Mobile claim form → auto-routed to the correct approver tier → status pushed back to staff → payroll system updated automatically.<br><strong>Result:</strong> Claim cycle cut from 2 weeks to 48 hours; full digital audit trail.</div>
+              <div class="case-outcome"><strong>After Automatation:</strong>  Claim cycle cut from 2 weeks to 48 hours; full digital audit trail.</div>
             </div>
 
             <div class="case-card">
@@ -560,7 +570,7 @@
                 </div>
               </div>
               <p class="case-desc">Service job cards were paper-based. Management had no real-time view of technician efficiency, customer satisfaction or bay utilisation.</p>
-              <div class="case-outcome"><strong>Solution:</strong> QR-code after-service form → automatic aggregation → live management dashboard tracking NPS, job cycle time, repeat-fault rate and bay utilisation.<br><strong>Result:</strong> Instant KPI visibility; data-driven scheduling of technician workloads.</div>
+              <div class="case-outcome"><strong>After Automatation:</strong>  Instant KPI visibility; data-driven scheduling of technician workloads.</div>
             </div>
 
             <div class="case-card">
@@ -572,7 +582,7 @@
                 </div>
               </div>
               <p class="case-desc">Manual fuel log books and spreadsheet maintenance schedules led to unplanned machine downtime, inaccurate cost tracking and compliance gaps.</p>
-              <div class="case-outcome"><strong>Solution:</strong> Digital fuel-log capture linked to each machine → automated preventive-maintenance scheduling → SMS alerts dispatched to operators before due dates.<br><strong>Result:</strong> 30 % reduction in unplanned breakdowns; accurate cost-per-operating-hour reporting.</div>
+              <div class="case-outcome"><strong>After Automatation:</strong> 30 % reduction in unplanned breakdowns; accurate cost-per-operating-hour reporting.</div>
             </div>
 
             <div class="case-card">
@@ -584,7 +594,7 @@
                 </div>
               </div>
               <p class="case-desc">Dispatch coordinators manually matched incoming orders to available drivers via WhatsApp group chats, causing delays and uneven workload distribution.</p>
-              <div class="case-outcome"><strong>Solution:</strong> Automated order-intake form → round-robin assignment engine → instant driver notification via WhatsApp with job details and delivery address.<br><strong>Result:</strong> Dispatch time cut from ~15 min to under 60 seconds; fair and transparent fleet workload distribution.</div>
+              <div class="case-outcome"><strong>After Automatation:</strong>  Dispatch time cut from ~15 min to under 60 seconds; fair and transparent fleet workload distribution.</div>
             </div>
 
             <div class="case-card">
@@ -596,7 +606,7 @@
                 </div>
               </div>
               <p class="case-desc">Finance teams were manually chasing overdue invoices, keying payment receipts into spreadsheets and reconciling accounts at month-end, prone to errors and delays.</p>
-              <div class="case-outcome"><strong>Solution:</strong> Auto-generated invoices on deal close → scheduled payment reminder sequences → receipt capture via mobile form → auto-reconciliation against outstanding ledger.<br><strong>Result:</strong> DSO (days sales outstanding) reduced by 35 %; month-end closing time cut in half with near-zero manual data entry.</div>
+              <div class="case-outcome"><strong>After Automatation:</strong> SO (days sales outstanding) reduced by 35 %; month-end closing time cut in half with near-zero manual data entry.</div>
             </div>
 
           </div>
@@ -610,7 +620,7 @@
 
             <div class="testi-card">
               <div class="testi-quote">&ldquo;</div>
-              <p class="testi-text">Before Stark Automate, my front-desk team was drowning in reminder calls every morning. Now the system handles it automatically and our no-show rate has dropped dramatically. I wish I had done this two years ago.</p>
+              <p class="testi-text">Reminder calls used to eat up our mornings. Now the system handles them automatically and our no-show rate has dropped dramatically.</p>
               <div class="testi-author">
                 <div class="testi-avatar">NR</div>
                 <div class="testi-info">
@@ -623,7 +633,7 @@
 
             <div class="testi-card">
               <div class="testi-quote">&ldquo;</div>
-              <p class="testi-text">Our claim approvals used to pile up for weeks and the finance team was always chasing people. Now everything is routed automatically and my staff get updates on their phones. The whole process is transparent and fast.</p>
+              <p class="testi-text">Claim approvals used to pile up for weeks. Now everything is routed automatically, staff get instant updates, and the process is completely transparent.</p>
               <div class="testi-author">
                 <div class="testi-avatar">DL</div>
                 <div class="testi-info">
@@ -636,7 +646,7 @@
 
             <div class="testi-card">
               <div class="testi-quote">&ldquo;</div>
-              <p class="testi-text">The round-robin dispatch system completely removed the chaos from our operations. Drivers get assigned within seconds and we have full visibility on every order. It has made a huge difference to our delivery SLA.</p>
+              <p class="testi-text">Dispatch chaos is gone. Drivers are assigned in seconds and we have full visibility on every order, our delivery SLA has never been better.</p>
               <div class="testi-author">
                 <div class="testi-avatar">SC</div>
                 <div class="testi-info">
