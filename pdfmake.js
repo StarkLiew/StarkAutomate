@@ -204,9 +204,12 @@ export const code = async (inputs) => {
 
   const pdfBuffer = await pdfMake.createPdf(docDefinition).getBuffer();
 
+  const base64 = Buffer.from(pdfBuffer).toString('base64');
+
   return {
-    pdf_base64: Buffer.from(pdfBuffer).toString('base64'),
+    data_url: `data:application/pdf;base64,${base64}`,
+    base64,
+    mimeType: 'application/pdf',
     filename: `Invoice-${d.invoice_number ?? 'draft'}.pdf`,
-    mime_type: 'application/pdf',
   };
 };

@@ -1,0 +1,772 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Pricing – StarkAutomate</title>
+  <meta name="description" content="Transparent automation pricing for SMEs. Starter, Enterprise & Corporate packages by StarkAutomate.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --accent:#00f0ff;
+      --accent2:#a855f7;
+      --accent3:#f59e0b;
+      --bg:#0a0a0f;
+      --bg2:#12121a;
+      --card:#16161f;
+      --border:#2a2a3a;
+      --text:#e4e4eb;
+      --muted:#7a7a8c;
+      --glow:0 0 20px rgba(0,240,255,0.3);
+      --glow2:0 0 20px rgba(168,85,247,0.3);
+      --glow3:0 0 20px rgba(245,158,11,0.3);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Inter',system-ui,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      margin:0;
+      line-height:1.6;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%,rgba(0,240,255,0.08),transparent),
+        radial-gradient(ellipse 60% 40% at 100% 100%,rgba(168,85,247,0.06),transparent);
+      background-attachment:fixed;
+    }
+    .container{max-width:1080px;margin:0 auto;padding:24px}
+
+    /* ── Header ─────────────────────────────────── */
+    header{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px 0;
+      border-bottom:1px solid var(--border);
+      position:sticky;top:0;
+      background:rgba(10,10,15,0.85);
+      backdrop-filter:blur(12px);
+      z-index:100;
+    }
+    .brand{display:flex;flex-direction:column;align-items:center;gap:4px}
+    .brand img{height:40px;width:auto}
+    .brand-tagline{
+      font-family:'Orbitron',monospace;
+      font-weight:700;font-size:0.75rem;letter-spacing:0.18em;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background-clip:text;
+      text-transform:uppercase;
+    }
+    nav a{
+      margin:0 10px;color:var(--muted);text-decoration:none;font-weight:500;
+      position:relative;transition:color .2s;
+    }
+    nav a:hover{color:var(--accent)}
+    nav a::after{
+      content:'';position:absolute;left:0;bottom:-4px;width:0;height:2px;
+      background:var(--accent);transition:width .25s;
+    }
+    nav a:hover::after{width:100%}
+    nav a.active{color:var(--accent)}
+    nav a.active::after{width:100%}
+
+    /* ── Hero ─────────────────────────────────── */
+    .hero{
+      background:linear-gradient(135deg,rgba(0,240,255,0.08),rgba(168,85,247,0.06));
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:48px 32px 40px;
+      margin-top:24px;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+      background:conic-gradient(from 0deg,transparent,rgba(0,240,255,0.03),transparent 30%);
+      animation:rotate 20s linear infinite;
+    }
+    @keyframes rotate{to{transform:rotate(360deg)}}
+    .hero h1{
+      font-family:'Orbitron',monospace;
+      font-size:2.2rem;margin:0 0 12px;
+      position:relative;
+    }
+    .hero p{position:relative;color:var(--muted);max-width:640px;margin:0 auto}
+    .hero-quote{
+      margin-top:24px;
+      display:inline-block;
+      position:relative;
+      background:linear-gradient(135deg,rgba(0,240,255,0.07),rgba(168,85,247,0.05));
+      border:1px solid rgba(0,240,255,0.25);
+      border-radius:12px;
+      padding:14px 24px;
+      font-size:0.95rem;
+      color:var(--text);
+      font-style:italic;
+    }
+    .hero-quote span{color:var(--accent);font-style:normal;font-weight:600}
+
+    /* ── Toggle ─────────────────────────────────── */
+    .period-toggle{
+      display:flex;align-items:center;justify-content:center;gap:12px;
+      margin:32px 0 0;
+    }
+    .period-toggle span{color:var(--muted);font-size:0.9rem}
+    .toggle-pill{
+      position:relative;width:48px;height:26px;
+      background:var(--border);border-radius:13px;
+      cursor:pointer;transition:background .25s;
+    }
+    .toggle-pill.active{background:linear-gradient(90deg,var(--accent),var(--accent2))}
+    .toggle-pill::after{
+      content:'';position:absolute;
+      top:3px;left:3px;width:20px;height:20px;
+      background:#fff;border-radius:50%;
+      transition:transform .25s;
+    }
+    .toggle-pill.active::after{transform:translateX(22px)}
+
+    /* ── Pricing grid ─────────────────────────────────── */
+    .pricing-grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:24px;
+      margin-top:40px;
+    }
+    @media(min-width:860px){
+      .pricing-grid{grid-template-columns:repeat(3,1fr)}
+    }
+
+    /* ── Pricing card ─────────────────────────────────── */
+    .pricing-card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:32px 28px 28px;
+      display:flex;
+      flex-direction:column;
+      position:relative;
+      overflow:hidden;
+      opacity:0;
+      transform:translateY(40px);
+      transition:opacity .55s ease,transform .55s ease,border-color .3s,box-shadow .3s;
+    }
+    .pricing-card.visible{opacity:1;transform:translateY(0)}
+    .pricing-card:nth-child(2){transition-delay:.12s}
+    .pricing-card:nth-child(3){transition-delay:.24s}
+    .pricing-card::before{
+      content:'';position:absolute;top:0;left:0;right:0;height:3px;
+      background:var(--stripe,linear-gradient(90deg,var(--accent),var(--accent2)));
+    }
+    .pricing-card:hover{
+      transform:translateY(-6px);
+      box-shadow:var(--card-glow,var(--glow));
+      border-color:var(--card-accent,var(--accent));
+    }
+    .pricing-card.visible:nth-child(2){transform:translateY(0)}
+    .pricing-card.visible:nth-child(2):hover{transform:translateY(-6px)}
+
+    /* Tier colours */
+    .tier-starter{--card-accent:var(--accent);--card-glow:var(--glow);--stripe:linear-gradient(90deg,#00f0ff,#38bdf8)}
+    .tier-enterprise{--card-accent:var(--accent2);--card-glow:var(--glow2);--stripe:linear-gradient(90deg,var(--accent2),#ec4899)}
+    .tier-corporate{--card-accent:var(--accent3);--card-glow:var(--glow3);--stripe:linear-gradient(90deg,var(--accent3),#ef4444)}
+
+    .badge-popular{
+      position:absolute;top:18px;right:18px;
+      font-size:0.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+      background:linear-gradient(135deg,var(--accent2),#ec4899);
+      color:#fff;
+      padding:4px 10px;border-radius:20px;
+    }
+
+    .tier-icon{font-size:2rem;margin-bottom:12px}
+    .tier-name{
+      font-family:'Orbitron',monospace;
+      font-size:1.1rem;font-weight:700;
+      margin:0 0 4px;
+    }
+    .tier-starter .tier-name{color:var(--accent)}
+    .tier-enterprise .tier-name{color:var(--accent2)}
+    .tier-corporate .tier-name{color:var(--accent3)}
+
+    .tier-tagline{color:var(--muted);font-size:0.85rem;margin:0 0 20px}
+
+    .price-block{margin-bottom:20px}
+    .price-main{
+      font-family:'Orbitron',monospace;
+      font-size:2rem;font-weight:700;
+      display:flex;align-items:baseline;gap:6px;
+      line-height:1;
+    }
+    .price-currency{font-size:1.1rem;align-self:flex-start;margin-top:5px}
+    .price-sub{color:var(--muted);font-size:0.8rem;margin-top:4px}
+
+    .divider{border:0;border-top:1px solid var(--border);margin:0 0 16px}
+
+    /* Feature list */
+    .feature-list{list-style:none;padding:0;margin:0 0 20px;flex:1}
+    .feature-list li{
+      display:flex;align-items:flex-start;gap:10px;
+      font-size:0.875rem;padding:6px 0;
+      border-bottom:1px solid rgba(255,255,255,0.04);
+    }
+    .feature-list li:last-child{border-bottom:0}
+    .feat-icon{
+      flex-shrink:0;width:18px;height:18px;margin-top:2px;
+      display:flex;align-items:center;justify-content:center;
+      font-size:0.75rem;line-height:1;
+    }
+    .feat-yes{color:var(--accent)}
+    .feat-ai{color:var(--accent2)}
+    .feat-gold{color:var(--accent3)}
+    .feat-no{color:#ef4444;opacity:.7}
+    .feat-note{color:var(--muted);font-size:0.78rem;margin-top:2px;display:block}
+
+    /* Maintenance */
+    .maint-block{
+      background:rgba(255,255,255,0.03);
+      border:1px solid var(--border);
+      border-radius:10px;
+      padding:12px 14px;
+      margin-bottom:20px;
+      font-size:0.82rem;
+    }
+    .maint-block .maint-label{
+      font-family:'Orbitron',monospace;font-size:0.72rem;
+      color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;
+    }
+    .maint-price{
+      font-size:1rem;font-weight:700;
+    }
+    .tier-starter .maint-price{color:var(--accent)}
+    .tier-enterprise .maint-price{color:var(--accent2)}
+    .tier-corporate .maint-price{color:var(--accent3)}
+    .maint-items{color:var(--muted);margin:4px 0 0;padding-left:0;list-style:none}
+    .maint-items li::before{content:'· ';color:var(--muted)}
+
+    /* CTA button */
+    .cta-btn{
+      display:block;text-align:center;text-decoration:none;
+      font-weight:600;font-size:0.9rem;
+      padding:12px 20px;border-radius:10px;
+      transition:transform .2s,box-shadow .2s;
+      cursor:pointer;border:0;width:100%;
+    }
+    .cta-btn:hover{transform:scale(1.03)}
+    .tier-starter .cta-btn{
+      background:linear-gradient(135deg,var(--accent),#38bdf8);
+      color:#0a0a0f;
+      box-shadow:0 0 20px rgba(0,240,255,0.2);
+    }
+    .tier-starter .cta-btn:hover{box-shadow:0 0 30px rgba(0,240,255,0.4)}
+    .tier-enterprise .cta-btn{
+      background:linear-gradient(135deg,var(--accent2),#ec4899);
+      color:#fff;
+      box-shadow:0 0 20px rgba(168,85,247,0.2);
+    }
+    .tier-enterprise .cta-btn:hover{box-shadow:0 0 30px rgba(168,85,247,0.4)}
+    .tier-corporate .cta-btn{
+      background:linear-gradient(135deg,var(--accent3),#ef4444);
+      color:#0a0a0f;
+      box-shadow:0 0 20px rgba(245,158,11,0.2);
+    }
+    .tier-corporate .cta-btn:hover{box-shadow:0 0 30px rgba(245,158,11,0.4)}
+
+    /* ── Add-ons section ─────────────────────────────────── */
+    .section-label{
+      font-family:'Orbitron',monospace;
+      font-size:0.75rem;letter-spacing:.15em;text-transform:uppercase;
+      color:var(--muted);margin:56px 0 20px;
+      display:flex;align-items:center;gap:14px;
+    }
+    .section-label::after{
+      content:'';flex:1;height:1px;background:var(--border);
+    }
+
+    .addon-grid{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:16px;
+    }
+    @media(min-width:640px){.addon-grid{grid-template-columns:1fr 1fr}}
+    @media(min-width:1000px){.addon-grid{grid-template-columns:repeat(3,1fr)}}
+
+    .addon-card{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:20px;
+      opacity:0;
+      transform:translateY(30px);
+      transition:opacity .5s ease,transform .5s ease,border-color .25s,box-shadow .25s;
+    }
+    .addon-card.visible{opacity:1;transform:translateY(0)}
+    .addon-card:hover{border-color:var(--accent);box-shadow:var(--glow)}
+    .addon-card h3{
+      font-family:'Orbitron',monospace;
+      font-size:0.82rem;color:var(--accent);margin:0 0 10px;
+      text-transform:uppercase;letter-spacing:.08em;
+    }
+    .addon-row{
+      display:flex;justify-content:space-between;align-items:baseline;
+      font-size:0.85rem;padding:5px 0;
+      border-bottom:1px solid rgba(255,255,255,0.04);
+    }
+    .addon-row:last-child{border-bottom:0}
+    .addon-row .alabel{color:var(--muted)}
+    .addon-row .aprice{font-weight:600;color:var(--text)}
+
+    /* ── Notes / ownership ─────────────────────────────────── */
+    .note-grid{
+      display:grid;grid-template-columns:1fr;gap:16px;
+    }
+    @media(min-width:640px){.note-grid{grid-template-columns:1fr 1fr}}
+
+    .note-card{
+      background:var(--bg2);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:20px;
+      font-size:0.85rem;
+      opacity:0;transform:translateY(20px);
+      transition:opacity .5s ease,transform .5s ease;
+    }
+    .note-card.visible{opacity:1;transform:translateY(0)}
+    .note-card h3{
+      font-family:'Orbitron',monospace;
+      font-size:0.8rem;color:var(--accent2);
+      text-transform:uppercase;letter-spacing:.08em;
+      margin:0 0 10px;
+    }
+    .note-card ul{padding-left:0;margin:0;list-style:none}
+    .note-card li{
+      padding:4px 0;color:var(--muted);
+      display:flex;gap:8px;
+      border-bottom:1px solid rgba(255,255,255,0.04);
+    }
+    .note-card li:last-child{border-bottom:0}
+    .note-card li::before{content:'→';color:var(--accent);flex-shrink:0}
+
+    /* ── Dashboard scope callout ─────────────────────────────────── */
+    .scope-callout{
+      background:linear-gradient(135deg,rgba(168,85,247,0.08),rgba(0,240,255,0.05));
+      border:1px solid rgba(168,85,247,0.35);
+      border-radius:14px;
+      padding:24px 28px;
+      margin-top:16px;
+      display:flex;gap:18px;align-items:flex-start;
+    }
+    .scope-icon{font-size:1.8rem;flex-shrink:0;line-height:1}
+    .scope-body h3{
+      font-family:'Orbitron',monospace;
+      font-size:0.9rem;color:var(--accent2);margin:0 0 8px;
+    }
+    .scope-body p{margin:0 0 6px;font-size:0.875rem;color:var(--muted)}
+    .scope-body strong{color:var(--text)}
+
+    /* ── Positioning strip ─────────────────────────────────── */
+    .positioning{
+      background:linear-gradient(135deg,rgba(0,240,255,0.07),rgba(168,85,247,0.05));
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:28px;
+      margin-top:0;
+      display:grid;
+      grid-template-columns:1fr;
+      gap:16px;
+    }
+    @media(min-width:640px){.positioning{grid-template-columns:repeat(3,1fr)}}
+    .pos-item{
+      text-align:center;
+      padding:16px;
+      border-radius:10px;
+      background:rgba(255,255,255,0.03);
+    }
+    .pos-tier{
+      font-family:'Orbitron',monospace;font-size:0.75rem;
+      text-transform:uppercase;letter-spacing:.12em;margin-bottom:6px;
+    }
+    .pos-item:nth-child(1) .pos-tier{color:var(--accent)}
+    .pos-item:nth-child(2) .pos-tier{color:var(--accent2)}
+    .pos-item:nth-child(3) .pos-tier{color:var(--accent3)}
+    .pos-desc{font-size:0.82rem;color:var(--muted)}
+
+    /* ── CTA strip ─────────────────────────────────── */
+    .cta-strip{
+      background:linear-gradient(135deg,rgba(0,240,255,0.1),rgba(168,85,247,0.08));
+      border:1px solid rgba(0,240,255,0.2);
+      border-radius:16px;
+      padding:40px 32px;
+      text-align:center;
+      margin-top:0;
+    }
+    .cta-strip h2{
+      font-family:'Orbitron',monospace;
+      font-size:1.5rem;margin:0 0 12px;
+    }
+    .cta-strip p{color:var(--muted);margin:0 0 24px}
+    .cta-strip a{
+      display:inline-block;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:#0a0a0f;font-weight:700;font-size:0.95rem;
+      padding:14px 32px;border-radius:10px;
+      text-decoration:none;
+      transition:transform .2s,box-shadow .2s;
+      box-shadow:var(--glow);
+    }
+    .cta-strip a:hover{transform:scale(1.04);box-shadow:0 0 32px rgba(0,240,255,0.4)}
+
+    /* ── Footer ─────────────────────────────────── */
+    footer{
+      margin-top:60px;
+      background:var(--bg2);
+      border-top:1px solid var(--border);
+      padding:48px 24px 32px;
+    }
+    .footer-inner{
+      max-width:1080px;margin:0 auto;
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;
+    }
+    .footer-col h4{
+      font-family:'Orbitron',monospace;
+      color:var(--accent);margin:0 0 16px;font-size:0.95rem;
+    }
+    .footer-col a{
+      display:block;color:var(--muted);text-decoration:none;
+      margin:8px 0;transition:color .2s;
+    }
+    .footer-col a:hover{color:var(--accent)}
+    .footer-bottom{
+      max-width:1080px;margin:32px auto 0;
+      text-align:center;color:var(--muted);font-size:0.85rem;
+      border-top:1px solid var(--border);padding-top:24px;
+    }
+
+    /* ── Utility ─────────────────────────────────── */
+    .muted{color:var(--muted)}
+    .text-xs{font-size:0.78rem}
+    .mt4{margin-top:4px}
+    .asterisk{color:var(--muted);font-size:0.78rem;margin-top:12px}
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="brand">
+      <img src="logo.png" alt="StarkAutomate">
+      <span class="brand-tagline">Automate</span>
+    </div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="index.html#services">Services</a>
+      <a href="pricing.html" class="active">Pricing</a>
+      <a href="index.html#enquiry">Enquiry</a>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hero">
+      <h1>Pricing Packages</h1>
+      <p>Transparent, no-surprise pricing. We automate on top of what you already use — keeping you in full control of your data, tools, and costs.</p>
+      <div class="hero-quote">
+        <span>"We don't replace your system —</span> we automate on top of what you already use."
+      </div>
+    </section>
+
+    <!-- Pricing Cards -->
+    <div class="pricing-grid">
+
+      <!-- Starter -->
+      <div class="pricing-card tier-starter">
+        <div class="tier-icon">⚡</div>
+        <div class="tier-name">Starter</div>
+        <div class="tier-tagline">Small teams starting automation</div>
+        <div class="price-block">
+          <div class="price-main">
+            <span class="price-currency">RM</span>
+            <span>1,500</span>
+          </div>
+          <div class="price-sub">One-time setup fee</div>
+        </div>
+        <hr class="divider">
+        <ul class="feature-list">
+          <li><span class="feat-icon feat-yes">✓</span><span>3 workflow designs (non-AI)</span></li>
+          <li><span class="feat-icon feat-yes">✓</span><span>3 workflow implementations</span></li>
+          <li><span class="feat-icon feat-yes">✓</span><span>Email automation (Gmail / SMTP)</span></li>
+          <li><span class="feat-icon feat-yes">✓</span><span>Google Sheets as data source</span></li>
+          <li><span class="feat-icon feat-yes">✓</span><span>Google Drive basic storage</span></li>
+          <li><span class="feat-icon feat-yes">✓</span><span>Google Calendar integration</span></li>
+          <li><span class="feat-icon feat-yes">✓</span><span>Basic process consultation</span></li>
+          <li><span class="feat-icon feat-no">✕</span><span class="muted">AI features</span></li>
+          <li><span class="feat-icon feat-no">✕</span><span class="muted">Database / Excel / CSV integration</span></li>
+          <li><span class="feat-icon feat-no">✕</span><span class="muted">Dashboard &amp; reporting tools</span></li>
+        </ul>
+        <div class="maint-block">
+          <div class="maint-label">Optional Maintenance</div>
+          <div class="maint-price">RM 299 <span class="muted text-xs">/ month</span></div>
+          <ul class="maint-items">
+            <li>Bug fixes &amp; minor updates</li>
+            <li>Basic support</li>
+          </ul>
+        </div>
+        <a href="index.html#enquiry" class="cta-btn">Get Started</a>
+      </div>
+
+      <!-- Enterprise -->
+      <div class="pricing-card tier-enterprise">
+        <div class="badge-popular">Most Popular</div>
+        <div class="tier-icon">🚀</div>
+        <div class="tier-name">Enterprise</div>
+        <div class="tier-tagline">Businesses scaling with AI &amp; automation</div>
+        <div class="price-block">
+          <div class="price-main">
+            <span class="price-currency">RM</span>
+            <span>4,500</span>
+          </div>
+          <div class="price-sub">One-time setup fee</div>
+        </div>
+        <hr class="divider">
+        <ul class="feature-list">
+          <li><span class="feat-icon feat-yes">✓</span><span>5 workflow designs</span></li>
+          <li><span class="feat-icon feat-ai">✦</span><span>AI prompt design &amp; optimisation</span></li>
+          <li><span class="feat-icon feat-yes">✓</span><span>5 workflow implementations</span></li>
+          <li><span class="feat-icon feat-yes">✓</span><span>Email automation</span></li>
+          <li><span class="feat-icon feat-yes">✓</span><span>Messaging integration ready <span class="feat-note">WhatsApp / Telegram — client bears costs*</span></span></li>
+          <li><span class="feat-icon feat-yes">✓</span><span>Database / Excel / CSV integration</span></li>
+          <li><span class="feat-icon feat-yes">✓</span><span>Flexible storage (Drive / cloud / others)</span></li>
+          <li><span class="feat-icon feat-yes">✓</span><span>Calendar integration (API-supported)</span></li>
+          <li><span class="feat-icon feat-ai">✦</span>
+            <span>Dashboard add-on (optional)
+              <span class="feat-note">Up to 3 pages — Tableau / Looker Studio supported</span>
+              <span class="feat-note">Design &amp; build quoted separately · more pages → Corporate</span>
+            </span>
+          </li>
+        </ul>
+        <div class="maint-block">
+          <div class="maint-label">Optional Maintenance</div>
+          <div class="maint-price">RM 999 <span class="muted text-xs">/ month</span></div>
+          <ul class="maint-items">
+            <li>Priority support</li>
+            <li>Workflow &amp; AI optimisation</li>
+            <li>Continuous improvements</li>
+          </ul>
+        </div>
+        <a href="index.html#enquiry" class="cta-btn">Get Started</a>
+      </div>
+
+      <!-- Corporate -->
+      <div class="pricing-card tier-corporate">
+        <div class="tier-icon">🏢</div>
+        <div class="tier-name">Corporate</div>
+        <div class="tier-tagline">Scaling automation across departments</div>
+        <div class="price-block">
+          <div class="price-main">
+            <span>Custom Quote</span>
+          </div>
+          <div class="price-sub">Scoped to your requirements</div>
+        </div>
+        <hr class="divider">
+        <ul class="feature-list">
+          <li><span class="feat-icon feat-gold">✦</span><span>5+ workflow designs</span></li>
+          <li><span class="feat-icon feat-gold">✦</span><span>Full AI + automation strategy</span></li>
+          <li><span class="feat-icon feat-gold">✦</span><span>Advanced integrations (ERP, CRM, APIs)</span></li>
+          <li><span class="feat-icon feat-gold">✦</span><span>Multi-department workflows</span></li>
+          <li><span class="feat-icon feat-gold">✦</span><span>Complex data pipelines &amp; multi-source integration</span></li>
+          <li><span class="feat-icon feat-gold">✦</span><span>Cloud architecture integration</span></li>
+          <li><span class="feat-icon feat-gold">✦</span><span>Email &amp; messaging automation</span></li>
+          <li><span class="feat-icon feat-gold">✦</span>
+            <span>Full dashboard system
+              <span class="feat-note">No page limit — scoped per project</span>
+              <span class="feat-note">Advanced reporting &amp; analytics</span>
+            </span>
+          </li>
+        </ul>
+        <div class="maint-block">
+          <div class="maint-label">Optional Maintenance</div>
+          <div class="maint-price">RM 1,500 – 3,000 <span class="muted text-xs">/ month</span></div>
+          <ul class="maint-items">
+            <li>Dedicated SLA support</li>
+            <li>Continuous optimisation &amp; scaling</li>
+            <li>Performance monitoring &amp; reporting</li>
+          </ul>
+        </div>
+        <a href="index.html#enquiry" class="cta-btn">Request Quote</a>
+      </div>
+
+    </div><!-- /pricing-grid -->
+
+    <!-- Dashboard scope callout -->
+    <div class="scope-callout">
+      <div class="scope-icon">📊</div>
+      <div class="scope-body">
+        <h3>Dashboard Scope Explained</h3>
+        <p><strong>Enterprise</strong> includes up to <strong>3 dashboard pages</strong> — enough to demonstrate clear value with clean KPI views, without over-commitment on build time.</p>
+        <p><strong>Need more pages?</strong> Upgrade to Corporate or purchase additional pages as an add-on. Dashboard design &amp; build is quoted separately per project complexity.</p>
+        <p class="text-xs muted">Supported tools: Tableau, Looker Studio, Power BI, or equivalent.</p>
+      </div>
+    </div>
+
+    <!-- Add-ons & Ad-hoc -->
+    <div class="section-label">Ad-hoc &amp; Add-on Services</div>
+    <div class="addon-grid">
+
+      <div class="addon-card">
+        <h3>⚙️ Workflow Development</h3>
+        <div class="addon-row">
+          <span class="alabel">Simple flow</span>
+          <span class="aprice">RM 500</span>
+        </div>
+        <div class="addon-row">
+          <span class="alabel">Complex flow</span>
+          <span class="aprice">up to RM 2,000</span>
+        </div>
+        <div class="addon-row">
+          <span class="alabel">Support / hourly</span>
+          <span class="aprice">RM 100 / hr</span>
+        </div>
+      </div>
+
+      <div class="addon-card">
+        <h3>🛠️ Infrastructure Setup</h3>
+        <div class="addon-row">
+          <span class="alabel">Automation stack (n8n)</span>
+          <span class="aprice">RM 1,500</span>
+        </div>
+        <div class="addon-row">
+          <span class="alabel">AI local deploy (Ollama + Qwen)</span>
+          <span class="aprice">RM 1,000</span>
+        </div>
+        <div class="addon-row">
+          <span class="alabel">Client has own infra</span>
+          <span class="aprice">Build on yours</span>
+        </div>
+      </div>
+
+      <div class="addon-card">
+        <h3>💬 Messaging &amp; Email</h3>
+        <div class="addon-row">
+          <span class="alabel">Email (Gmail / SMTP)</span>
+          <span class="aprice">Integration Included</span>
+        </div>
+        <div class="addon-row">
+          <span class="alabel">WhatsApp Business API*</span>
+          <span class="aprice">Client subscribes</span>
+        </div>
+        <div class="addon-row">
+          <span class="alabel">Telegram integration*</span>
+          <span class="aprice">Client-managed</span>
+        </div>
+        <p class="asterisk">* Client must subscribe MailServer or Messaging platform API provider and bears all messaging costs.</p>
+      </div>
+
+    </div>
+
+    <!-- Data & Ownership notes -->
+    <div class="section-label">Data Ownership &amp; Infrastructure</div>
+    <div class="note-grid">
+      <div class="note-card">
+        <h3>📁 Your Data, Your Rules</h3>
+        <ul>
+          <li>All data is provided and owned by the client</li>
+          <li>Google Sheets, Database, Excel, CSV — your choice</li>
+          <li>We never store or retain client data</li>
+          <li>Full data portability at all times</li>
+        </ul>
+      </div>
+      <div class="note-card">
+        <h3>☁️ Infrastructure Responsibility</h3>
+        <ul>
+          <li>VPS / Cloud / On-premise — client-managed</li>
+          <li>Storage (Google Drive / cloud) — client account</li>
+          <li>Email server — client-provided</li>
+          <li>Messaging platforms — client subscription</li>
+          <li>AI provider &amp; credits — client-managed</li>
+          <li>Dashboard tool subscriptions — client-owned</li>
+        </ul>
+      </div>
+    </div>
+    <p class="muted text-xs" style="margin:12px 0 0;text-align:center">
+      StarkAutomate focuses purely on automation, integration, and optimisation — not infrastructure management.
+    </p>
+
+    <!-- Strategic positioning -->
+    <div class="section-label">Package Strategy</div>
+    <div class="positioning">
+      <div class="pos-item">
+        <div class="pos-tier">⚡ Starter</div>
+        <div class="pos-desc">Easy entry point — low risk, quick close. Build trust before scaling.</div>
+      </div>
+      <div class="pos-item">
+        <div class="pos-tier">🚀 Enterprise</div>
+        <div class="pos-desc">Main revenue driver — AI + automation with clear, scoped deliverables.</div>
+      </div>
+      <div class="pos-item">
+        <div class="pos-tier">🏢 Corporate</div>
+        <div class="pos-desc">Long-term partnerships — complex needs, maximum value delivery.</div>
+      </div>
+    </div>
+
+    <!-- CTA strip -->
+    <div class="section-label">Ready to Automate?</div>
+    <div class="cta-strip">
+      <h2>Let's Build Your Automation</h2>
+      <p>Not sure which package fits? Tell us about your business and we'll scope the best solution for you.</p>
+      <a href="index.html#enquiry">Start an Enquiry →</a>
+    </div>
+
+  </main>
+</div><!-- /container -->
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-col">
+      <h4>StarkAutomate</h4>
+      <a href="index.html">Home</a>
+      <a href="index.html#about">About Us</a>
+      <a href="index.html#services">Services</a>
+      <a href="pricing.html">Pricing</a>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <a href="index.html#services">Process Automation</a>
+      <a href="index.html#services">AI Integration</a>
+      <a href="index.html#services">Workflow Design</a>
+      <a href="index.html#services">Dashboard &amp; Reporting</a>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <a href="index.html#enquiry">Send Enquiry</a>
+      <a href="index.html#career">Careers</a>
+    </div>
+    <div class="footer-col">
+      <h4>Region</h4>
+      <a href="#">Kuala Lumpur</a>
+      <a href="#">Johor Bahru</a>
+      <a href="#">Singapore</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    &copy; 2025 StarkAutomate Solutions. All rights reserved.
+  </div>
+</footer>
+
+<script>
+  // Intersection observer for scroll-in animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.pricing-card, .addon-card, .note-card').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
