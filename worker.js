@@ -1,8 +1,10 @@
 const CORS = {
   'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Methods': 'POST, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
+
+const WHATCHIMP_API_URL = 'https://api.whatchimp.com'; // Replace with actual whatchimp API URL
 
 addEventListener('fetch', event => {
   event.respondWith(handle(event.request))
@@ -13,6 +15,12 @@ async function handle(request){
   if(request.method === 'OPTIONS'){
     return new Response(null, {status:204, headers: CORS})
   }
+  
+  // Handle whatchimp API proxy
+  if(url.pathname.startsWith('/api/whatchimp')){
+    return proxyWhatchimp(request, url);
+  }
+  
   if(url.pathname !== '/api' || request.method !== 'POST'){
     return new Response(null, {status:404})
   }
@@ -68,4 +76,42 @@ function sanitize(v){
 }
 function escapeHtml(s){
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// Proxy function for whatchimp API
+async function proxyWhatchimp(request, url){
+  try{
+    // Remove the /api/whatchimp prefix and preserve the rest of the path
+    const pathWithoutPrefix = url.pathname.replace('/api/whatchimp', '');
+    const whatChimpUrl = new URL(WHATCHIMP_API_URL + pathWithoutPrefix + url.search);
+    
+    // Create new request headers, forwarding authorization if present
+    const headers = new Headers(request.headers);
+    headers.delete('host'); // Remove the host header as it will be set by fetch
+    
+    const proxiedRequest = new Request(whatChimpUrl, {
+      method: request.method,
+      headers: headers,
+      body: request.method !== 'GET' && request.method !== 'HEAD' ? request.body : undefined
+    });
+    
+    const response = await fetch(proxiedRequest);
+    
+    // Return response with CORS headers
+    const responseHeaders = new Headers(response.headers);
+    Object.entries(CORS).forEach(([key, value]) => {
+      responseHeaders.set(key, value);
+    });
+    
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: responseHeaders
+    });
+  }catch(err){
+    return new Response(JSON.stringify({error:'Proxy error', details:String(err)}), {
+      status:502, 
+      headers:{...CORS,'Content-Type':'application/json'}
+    });
+  }
 }
