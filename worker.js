@@ -4,7 +4,7 @@ const CORS = {
   'Access-Control-Allow-Headers': 'Content-Type, Authorization',
 };
 
-const WHATCHIMP_API_URL = 'https://api.whatchimp.com'; // Replace with actual whatchimp API URL
+const WHATCHIMP_API_URL = 'https://app.whatchimp.com/api/v1';
 
 addEventListener('fetch', event => {
   event.respondWith(handle(event.request))
