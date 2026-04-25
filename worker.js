@@ -16,9 +16,9 @@ async function handle(request){
     return new Response(null, {status:204, headers: CORS})
   }
   
-  // Handle whatchimp API proxy
-  if(url.pathname.startsWith('/api/whatchimp')){
-    return proxyWhatchimp(request, url);
+  // Handle services API proxy
+  if(url.pathname.startsWith('/api/services')){
+    return proxyService(request, url);
   }
   
   if(url.pathname !== '/api' || request.method !== 'POST'){
@@ -78,11 +78,11 @@ function escapeHtml(s){
   return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// Proxy function for whatchimp API
-async function proxyWhatchimp(request, url){
+// Proxy function for services API
+async function proxyService(request, url){
   try{
-    // Remove the /api/whatchimp prefix and preserve the rest of the path
-    const pathWithoutPrefix = url.pathname.replace('/api/whatchimp', '');
+    // Remove the /api/services prefix and preserve the rest of the path
+    const pathWithoutPrefix = url.pathname.replace('/api/services', '');
     const whatChimpUrl = new URL(WHATCHIMP_API_URL + pathWithoutPrefix + url.search);
     
     // Create new request headers, forwarding authorization if present
