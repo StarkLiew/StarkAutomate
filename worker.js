@@ -80,6 +80,14 @@ function escapeHtml(s){
 
 // Proxy function for services API
 async function proxyService(request, url){
+  // Only allow POST requests
+  if(request.method !== 'POST'){
+    return new Response(JSON.stringify({error:'Method not allowed. Only POST requests are supported'}), {
+      status: 405,
+      headers: {...CORS, 'Content-Type': 'application/json', 'Allow': 'POST'}
+    });
+  }
+  
   try{
     // Remove the /api/services prefix and preserve the rest of the path
     const pathWithoutPrefix = url.pathname.replace('/api/services', '');
