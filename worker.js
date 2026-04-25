@@ -80,17 +80,28 @@ function escapeHtml(s){
 
 // Proxy function for services API
 async function proxyService(request, url){
-  // Only allow POST requests
-  if(request.method !== 'POST'){
-    return new Response(JSON.stringify({error:'Method not allowed. Only POST requests are supported'}), {
+  const pathWithoutPrefix = url.pathname.replace('/api/services', '');
+  
+  // Allowed GET endpoints - add patterns that should be accessible via GET
+  const allowedGetEndpoints = [
+    /^\/get\//,  // Allow /get/* endpoints
+  ];
+  
+  // Check if method is allowed
+  const isGetAllowed = allowedGetEndpoints.some(pattern => pattern.test(pathWithoutPrefix));
+  
+  if(request.method === 'POST'){
+    // POST is always allowed
+  } else if(request.method === 'GET' && isGetAllowed){
+    // GET is allowed for specific endpoints
+  } else {
+    return new Response(JSON.stringify({error:'Method not allowed. POST is always allowed, GET only for specific endpoints'}), {
       status: 405,
-      headers: {...CORS, 'Content-Type': 'application/json', 'Allow': 'POST'}
+      headers: {...CORS, 'Content-Type': 'application/json', 'Allow': 'POST, GET'}
     });
   }
   
   try{
-    // Remove the /api/services prefix and preserve the rest of the path
-    const pathWithoutPrefix = url.pathname.replace('/api/services', '');
     const whatChimpUrl = new URL(WHATCHIMP_API_URL + pathWithoutPrefix + url.search);
     
     // Create new request headers, forwarding authorization if present
