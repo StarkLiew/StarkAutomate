@@ -90,16 +90,16 @@ async function proxyService(request, url){
   // Check if method is allowed
   const isGetAllowed = allowedGetEndpoints.some(pattern => pattern.test(pathWithoutPrefix));
   
-  if(request.method === 'POST'){
-    // POST is always allowed
-  } else if(request.method === 'GET' && isGetAllowed){
-    // GET is allowed for specific endpoints
-  } else {
-    return new Response(JSON.stringify({error:'Method not allowed. POST is always allowed, GET only for specific endpoints'}), {
-      status: 405,
-      headers: {...CORS, 'Content-Type': 'application/json', 'Allow': 'POST, GET'}
-    });
-  }
+  // if(request.method === 'POST'){
+  //   // POST is always allowed
+  // } else if(request.method === 'GET' && isGetAllowed){
+  //   // GET is allowed for specific endpoints
+  // } else {
+  //   return new Response(JSON.stringify({error:'Method not allowed. POST is always allowed, GET only for specific endpoints'}), {
+  //     status: 405,
+  //     headers: {...CORS, 'Content-Type': 'application/json', 'Allow': 'POST, GET'}
+  //   });
+  // }
   
   try{
     const whatChimpUrl = new URL(WHATCHIMP_API_URL + pathWithoutPrefix + url.search);
