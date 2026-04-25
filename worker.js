@@ -82,7 +82,7 @@ function escapeHtml(s){
 async function proxyWhatchimp(request, url){
   try{
     // Remove the /api/whatchimp prefix and preserve the rest of the path
-    const pathWithoutPrefix = url.pathname.replace('/api/v1', '');
+    const pathWithoutPrefix = url.pathname.replace('/api/whatchimp', '');
     const whatChimpUrl = new URL(WHATCHIMP_API_URL + pathWithoutPrefix + url.search);
     
     // Create new request headers, forwarding authorization if present
