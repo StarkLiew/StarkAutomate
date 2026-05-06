@@ -4,9 +4,3 @@ compatibility_date = "2026-04-02"
 
 [assets]
 directory = "./public"
-
-[env.production]
-vars = { 
-  DB_PROXY_URL = "https://stark-automate.vercel.app/api/db-proxy",
-  DB_API_KEY = "45nSIta1J83sjo2nVzmZk77UVMenaztZ"
-}
