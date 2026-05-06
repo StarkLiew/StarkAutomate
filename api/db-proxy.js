@@ -9,41 +9,55 @@ const pool = mysql.createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  port: process.env.DB_PORT || 3306,
+  port: process.env.DB_PORT ? Number(process.env.DB_PORT) : 3306,
   waitForConnections: true,
   connectionLimit: 10,
   queueLimit: 0,
 });
 
+function jsonResponse(res, status, payload) {
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-db-api-key');
+  res.statusCode = status;
+  res.end(JSON.stringify(payload));
+}
+
 export default async function handler(req, res) {
-  // Only accept POST requests
-  if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, x-db-api-key');
+    return res.end();
   }
 
-  // Verify API key
+  if (req.method !== 'POST') {
+    return jsonResponse(res, 405, { error: 'Method not allowed' });
+  }
+
   const apiKey = req.headers['x-db-api-key'];
   if (apiKey !== process.env.DB_API_KEY) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return jsonResponse(res, 401, { error: 'Unauthorized' });
   }
 
   try {
     const { query, params } = req.body;
 
     if (!query) {
-      return res.status(400).json({ error: 'Query required' });
+      return jsonResponse(res, 400, { error: 'Query required' });
     }
 
     const connection = await pool.getConnection();
     const [rows] = await connection.execute(query, params || []);
     connection.release();
 
-    return res.status(200).json({ rows });
+    return jsonResponse(res, 200, { rows });
   } catch (error) {
     console.error('Database error:', error);
-    return res.status(500).json({ 
+    return jsonResponse(res, 500, {
       error: 'Database error',
-      details: error.message 
+      details: error.message,
     });
   }
 }

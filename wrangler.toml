@@ -7,6 +7,6 @@ directory = "./public"
 
 [env.production]
 vars = { 
-  DB_PROXY_URL = "https://stark-automate-git-main-starkprop86s-projects.vercel.app/api/db-proxy",
+  DB_PROXY_URL = "https://stark-automate.vercel.app/api/db-proxy",
   DB_API_KEY = "45nSIta1J83sjo2nVzmZk77UVMenaztZ"
 }
