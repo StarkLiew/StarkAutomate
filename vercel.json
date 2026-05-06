@@ -2,8 +2,6 @@
   "buildCommand": "echo 'Building Vercel serverless functions...'",
   "outputDirectory": "public",
   "functions": {
-    "api/**/*.js": {
-      "runtime":"vercel/node@20.x"
-    }
+    "api/**/*.js": {}
   }
 }
