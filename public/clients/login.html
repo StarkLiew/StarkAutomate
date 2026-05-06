@@ -249,7 +249,8 @@
   <script>
     // Theme toggle
     const themeToggle = document.getElementById('themeToggle');
-    const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    // const isDarkMode = localStorage.getItem('darkMode') === 'true';
+    const isDarkMode = true;
     if (isDarkMode) document.body.classList.add('dark-mode');
 
     themeToggle.addEventListener('click', () => {

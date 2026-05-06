@@ -1,5 +1,5 @@
 -- MySQL Database Schema for Stark Automate Client Dashboard
--- Database: if0_41775688_sas
+-- Database: if0_41775688_clients
 -- Host: sql305.infinityfree.com
 
 -- Clients Table
