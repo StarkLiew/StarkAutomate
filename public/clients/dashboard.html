@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dashboard - Stark Automate</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #02a54b;
+      --primary-light: #04d861;
+      --primary-dark: #017a3a;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --bg-light: #ffffff;
+      --bg-dark: #0f1419;
+      --text-light: #1a1a1a;
+      --text-dark: #e4e4eb;
+      --border-light: #e5e5e5;
+      --border-dark: #2a2a3a;
+      --surface-light: #f5f5f5;
+      --surface-dark: #1a1a24;
+      --card-light: #ffffff;
+      --card-dark: #16161f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', system-ui, sans-serif;
+      background-color: var(--surface-light);
+      color: var(--text-light);
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body.dark-mode {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    /* Layout */
+    .dashboard {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 260px;
+      background-color: var(--card-light);
+      border-right: 1px solid var(--border-light);
+      padding: 24px 0;
+      position: fixed;
+      left: 0;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    body.dark-mode .sidebar {
+      background-color: var(--card-dark);
+      border-right-color: var(--border-dark);
+    }
+
+    .sidebar-header {
+      padding: 0 24px;
+      margin-bottom: 32px;
+    }
+
+    .sidebar-logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .sidebar-nav li {
+      margin: 0;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 24px;
+      color: var(--text-light);
+      text-decoration: none;
+      transition: all 0.3s;
+      border-left: 3px solid transparent;
+    }
+
+    body.dark-mode .sidebar-nav a {
+      color: var(--text-dark);
+    }
+
+    .sidebar-nav a:hover {
+      background-color: var(--surface-light);
+      color: var(--primary);
+    }
+
+    body.dark-mode .sidebar-nav a:hover {
+      background-color: var(--surface-dark);
+    }
+
+    .sidebar-nav a.active {
+      background-color: rgba(2, 165, 75, 0.1);
+      color: var(--primary);
+      border-left-color: var(--primary);
+      font-weight: 600;
+    }
+
+    /* Main Content */
+    .main {
+      margin-left: 260px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    .header {
+      background-color: var(--card-light);
+      border-bottom: 1px solid var(--border-light);
+      padding: 16px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    body.dark-mode .header {
+      background-color: var(--card-dark);
+      border-bottom-color: var(--border-dark);
+    }
+
+    .header-title h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-light);
+    }
+
+    .btn-secondary {
+      background-color: var(--surface-light);
+      color: var(--text-light);
+      border: 1px solid var(--border-light);
+    }
+
+    body.dark-mode .btn-secondary {
+      background-color: var(--surface-dark);
+      color: var(--text-dark);
+      border-color: var(--border-dark);
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--border-light);
+    }
+
+    body.dark-mode .btn-secondary:hover {
+      background-color: var(--border-dark);
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      opacity: 0.9;
+    }
+
+    .btn-warning {
+      background-color: var(--warning);
+      color: white;
+    }
+
+    .btn-warning:hover {
+      opacity: 0.9;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      opacity: 0.6;
+      transition: opacity 0.3s;
+    }
+
+    .theme-toggle:hover {
+      opacity: 1;
+    }
+
+    .user-menu {
+      position: relative;
+    }
+
+    .user-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 18px;
+      opacity: 0.6;
+      transition: opacity 0.3s;
+    }
+
+    .user-btn:hover {
+      opacity: 1;
+    }
+
+    .dropdown {
+      display: none;
+      position: absolute;
+      right: 0;
+      top: 100%;
+      background-color: var(--card-light);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+
+    body.dark-mode .dropdown {
+      background-color: var(--card-dark);
+      border-color: var(--border-dark);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .dropdown.show {
+      display: block;
+    }
+
+    .dropdown a {
+      display: block;
+      padding: 12px 24px;
+      color: var(--text-light);
+      text-decoration: none;
+      transition: all 0.3s;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    body.dark-mode .dropdown a {
+      color: var(--text-dark);
+      border-bottom-color: var(--border-dark);
+    }
+
+    .dropdown a:last-child {
+      border-bottom: none;
+    }
+
+    .dropdown a:hover {
+      background-color: var(--surface-light);
+    }
+
+    body.dark-mode .dropdown a:hover {
+      background-color: var(--surface-dark);
+    }
+
+    /* Content */
+    .content {
+      flex: 1;
+      padding: 32px;
+      overflow-y: auto;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    body.dark-mode .tabs {
+      border-bottom-color: var(--border-dark);
+    }
+
+    .tab-btn {
+      padding: 12px 16px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-light);
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      font-family: inherit;
+    }
+
+    body.dark-mode .tab-btn {
+      color: var(--text-dark);
+    }
+
+    .tab-btn:hover {
+      color: var(--primary);
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Cards */
+    .card {
+      background-color: var(--card-light);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    body.dark-mode .card {
+      background-color: var(--card-dark);
+      border-color: var(--border-dark);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    /* Grid */
+    .grid {
+      display: grid;
+      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      margin-bottom: 24px;
+    }
+
+    .metric-card {
+      background-color: var(--card-light);
+      border: 1px solid var(--border-light);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    body.dark-mode .metric-card {
+      background-color: var(--card-dark);
+      border-color: var(--border-dark);
+    }
+
+    .metric-value {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--primary);
+      margin: 8px 0;
+    }
+
+    .metric-label {
+      font-size: 14px;
+      color: #888;
+    }
+
+    body.dark-mode .metric-label {
+      color: #aaa;
+    }
+
+    /* Table */
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .table th {
+      background-color: var(--surface-light);
+      border-bottom: 2px solid var(--border-light);
+      padding: 12px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    body.dark-mode .table th {
+      background-color: var(--surface-dark);
+      border-bottom-color: var(--border-dark);
+    }
+
+    .table td {
+      border-bottom: 1px solid var(--border-light);
+      padding: 12px;
+      font-size: 14px;
+    }
+
+    body.dark-mode .table td {
+      border-bottom-color: var(--border-dark);
+    }
+
+    .table tr:hover {
+      background-color: var(--surface-light);
+    }
+
+    body.dark-mode .table tr:hover {
+      background-color: var(--surface-dark);
+    }
+
+    /* Forms */
+    .form {
+      display: grid;
+      gap: 16px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    input, textarea, select {
+      padding: 10px;
+      border: 1px solid var(--border-light);
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: inherit;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      transition: border-color 0.3s;
+    }
+
+    body.dark-mode input,
+    body.dark-mode textarea,
+    body.dark-mode select {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+      border-color: var(--border-dark);
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(2, 165, 75, 0.1);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* Status badges */
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-success {
+      background-color: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .badge-warning {
+      background-color: rgba(245, 158, 11, 0.1);
+      color: var(--warning);
+    }
+
+    .badge-danger {
+      background-color: rgba(239, 68, 68, 0.1);
+      color: var(--danger);
+    }
+
+    .badge-pending {
+      background-color: rgba(59, 130, 246, 0.1);
+      color: #3b82f6;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background-color: var(--card-light);
+      border-radius: 8px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    body.dark-mode .modal-content {
+      background-color: var(--card-dark);
+    }
+
+    .modal-header {
+      padding: 24px;
+      border-bottom: 1px solid var(--border-light);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    body.dark-mode .modal-header {
+      border-bottom-color: var(--border-dark);
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 20px;
+      opacity: 0.6;
+      transition: opacity 0.3s;
+    }
+
+    .modal-close:hover {
+      opacity: 1;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .modal-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border-light);
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    body.dark-mode .modal-footer {
+      border-top-color: var(--border-dark);
+    }
+
+    /* Loading */
+    .loading {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid rgba(2, 165, 75, 0.3);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        position: absolute;
+        width: 200px;
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+        z-index: 999;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main {
+        margin-left: 0;
+      }
+
+      .content {
+        padding: 16px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .header {
+        padding: 12px 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">⚡ Stark</div>
+      </div>
+      <nav>
+        <ul class="sidebar-nav">
+          <li><a href="#" data-section="analytics" class="nav-link active">📊 Analytics</a></li>
+          <li><a href="#" data-section="templates" class="nav-link">📝 Message Templates</a></li>
+          <li><a href="#" data-section="campaigns" class="nav-link">📢 Campaigns</a></li>
+          <li><a href="#" data-section="settings" class="nav-link">⚙️ Settings</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main">
+      <!-- Header -->
+      <header class="header">
+        <div class="header-title">
+          <h1 id="pageTitle">Analytics Dashboard</h1>
+        </div>
+        <div class="header-actions">
+          <button class="theme-toggle" id="themeToggle">🌙</button>
+          <div class="user-menu">
+            <button class="user-btn" id="userBtn">👤</button>
+            <div class="dropdown" id="userDropdown">
+              <a href="#" id="logoutBtn">Logout</a>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <!-- Content Area -->
+      <div class="content">
+        <!-- Analytics Section -->
+        <section id="analytics-section" class="tab-content active">
+          <h2>Campaign Performance</h2>
+          <div class="grid">
+            <div class="metric-card">
+              <div class="metric-label">Campaigns Sent</div>
+              <div class="metric-value" id="sentCount">0</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Messages Read</div>
+              <div class="metric-value" id="readCount">0</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-label">Failed Sends</div>
+              <div class="metric-value" id="failCount">0</div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <h3 class="card-title">Recent Campaigns</h3>
+            </div>
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Campaign Name</th>
+                  <th>Template</th>
+                  <th>Date</th>
+                  <th>Sent</th>
+                  <th>Read</th>
+                  <th>Failed</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="campaignsTableBody">
+                <tr>
+                  <td colspan="7" style="text-align: center; color: #888;">No campaigns yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Templates Section -->
+        <section id="templates-section" class="tab-content">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h2>Message Templates</h2>
+            <button class="btn btn-primary" id="newTemplateBtn">+ Add Template</button>
+          </div>
+
+          <div class="tabs">
+            <button class="tab-btn active" data-template-tab="all">All Templates</button>
+            <button class="tab-btn" data-template-tab="approved">Approved</button>
+            <button class="tab-btn" data-template-tab="pending">Pending Review</button>
+            <button class="tab-btn" data-template-tab="rejected">Rejected</button>
+          </div>
+
+          <div id="templates-content">
+            <div id="all-templates" class="tab-content active"></div>
+            <div id="approved-templates" class="tab-content"></div>
+            <div id="pending-templates" class="tab-content"></div>
+            <div id="rejected-templates" class="tab-content"></div>
+          </div>
+        </section>
+
+        <!-- Campaigns Section -->
+        <section id="campaigns-section" class="tab-content">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+            <h2>Campaigns</h2>
+            <button class="btn btn-primary" id="newCampaignBtn">+ Create Campaign</button>
+          </div>
+
+          <div class="card">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Campaign Name</th>
+                  <th>Template</th>
+                  <th>Scheduled</th>
+                  <th>Status</th>
+                  <th>Recipients</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="activeCampaignsBody">
+                <tr>
+                  <td colspan="6" style="text-align: center; color: #888;">No campaigns created yet</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings-section" class="tab-content">
+          <div class="card">
+            <h2>Account Settings</h2>
+            <div class="form">
+              <div class="form-group">
+                <label>Client ID</label>
+                <input type="text" id="clientId" disabled>
+              </div>
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="settingsEmail" disabled>
+              </div>
+              <div class="form-group">
+                <label>WhatsApp Account ID (Reserved)</label>
+                <input type="text" id="waId" placeholder="To be assigned" disabled>
+              </div>
+              <button class="btn btn-danger btn-small" style="width: fit-content;">Logout</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for New Template -->
+  <div class="modal" id="templateModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Create Message Template</h2>
+        <button class="modal-close" onclick="closeModal('templateModal')">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="templateForm" class="form">
+          <div class="form-group">
+            <label for="templatePurpose">Purpose *</label>
+            <select id="templatePurpose" required>
+              <option value="">Select purpose</option>
+              <option value="Utility">Utility</option>
+              <option value="Marketing">Marketing</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="templateMessage">Message *</label>
+            <textarea id="templateMessage" required placeholder="Enter your message..."></textarea>
+          </div>
+          <div class="form-group">
+            <label for="templateCTA">Call-to-Action Button</label>
+            <select id="templateCTA">
+              <option value="">None</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="templateCTAUrl">CTA URL</label>
+            <input type="url" id="templateCTAUrl" placeholder="https://example.com">
+          </div>
+          <div class="form-group">
+            <label for="templateAttachment">Attachment (Image/Video URL)</label>
+            <input type="url" id="templateAttachment" placeholder="https://example.com/image.jpg">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('templateModal')">Cancel</button>
+        <button class="btn btn-primary" id="submitTemplateBtn">Submit for Approval</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for New Campaign -->
+  <div class="modal" id="campaignModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title">Create Campaign</h2>
+        <button class="modal-close" onclick="closeModal('campaignModal')">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="campaignForm" class="form">
+          <div class="form-group">
+            <label for="campaignName">Campaign Name *</label>
+            <input type="text" id="campaignName" required placeholder="e.g., Q2 Promotion">
+          </div>
+          <div class="form-group">
+            <label for="campaignTemplate">Approved Template *</label>
+            <select id="campaignTemplate" required>
+              <option value="">Select an approved template</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="campaignDate">Schedule Date *</label>
+              <input type="date" id="campaignDate" required>
+            </div>
+            <div class="form-group">
+              <label for="campaignTime">Schedule Time *</label>
+              <input type="time" id="campaignTime" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="campaignTimezone">Timezone</label>
+            <input type="text" value="Asia/Kuala_Lumpur" disabled>
+          </div>
+          <div class="form-group">
+            <label for="campaignSheets">Google Sheets Link</label>
+            <input type="url" id="campaignSheets" placeholder="https://docs.google.com/spreadsheets/...">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('campaignModal')">Cancel</button>
+        <button class="btn btn-primary" id="submitCampaignBtn">Create Campaign</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Global state
+    let currentClientId = null;
+    let currentToken = null;
+    let templates = [];
+    let campaigns = [];
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      currentClientId = localStorage.getItem('client_id');
+      currentToken = localStorage.getItem('token');
+
+      if (!currentClientId || !currentToken) {
+        window.location.href = '/clients/login.html';
+        return;
+      }
+
+      setupTheme();
+      setupNavigation();
+      setupEventListeners();
+      loadDashboardData();
+    });
+
+    // Theme management
+    function setupTheme() {
+      const themeToggle = document.getElementById('themeToggle');
+      const isDarkMode = localStorage.getItem('darkMode') === 'true';
+      if (isDarkMode) document.body.classList.add('dark-mode');
+      themeToggle.textContent = isDarkMode ? '☀️' : '🌙';
+
+      themeToggle.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('darkMode', document.body.classList.contains('dark-mode'));
+        themeToggle.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+      });
+    }
+
+    // Navigation
+    function setupNavigation() {
+      document.querySelectorAll('.nav-link').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const section = link.dataset.section;
+          showSection(section);
+          document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+          link.classList.add('active');
+        });
+      });
+    }
+
+    function showSection(section) {
+      document.querySelectorAll('section[id$="-section"]').forEach(s => s.classList.remove('active'));
+      const sectionEl = document.getElementById(`${section}-section`);
+      if (sectionEl) {
+        sectionEl.classList.add('active');
+        const titleMap = {
+          analytics: 'Analytics Dashboard',
+          templates: 'Message Templates',
+          campaigns: 'Campaigns',
+          settings: 'Settings'
+        };
+        document.getElementById('pageTitle').textContent = titleMap[section] || 'Dashboard';
+      }
+    }
+
+    // Event listeners
+    function setupEventListeners() {
+      document.getElementById('newTemplateBtn')?.addEventListener('click', () => openModal('templateModal'));
+      document.getElementById('newCampaignBtn')?.addEventListener('click', () => openModal('campaignModal'));
+      document.getElementById('submitTemplateBtn')?.addEventListener('click', submitTemplate);
+      document.getElementById('submitCampaignBtn')?.addEventListener('click', submitCampaign);
+      document.getElementById('logoutBtn')?.addEventListener('click', logout);
+      document.getElementById('userBtn')?.addEventListener('click', toggleUserMenu);
+
+      // Template tabs
+      document.querySelectorAll('[data-template-tab]').forEach(btn => {
+        btn.addEventListener('click', () => switchTemplateTab(btn.dataset.templateTab));
+      });
+    }
+
+    // Modal management
+    function openModal(modalId) {
+      document.getElementById(modalId).classList.add('show');
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('show');
+    }
+
+    // Template submission
+    async function submitTemplate() {
+      const form = document.getElementById('templateForm');
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const data = {
+        purpose: document.getElementById('templatePurpose').value,
+        message: document.getElementById('templateMessage').value,
+        cta: document.getElementById('templateCTA').value,
+        cta_url: document.getElementById('templateCTAUrl').value,
+        attachment: document.getElementById('templateAttachment').value
+      };
+
+      try {
+        const response = await fetch('/api/templates', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${currentToken}`
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          closeModal('templateModal');
+          form.reset();
+          await loadTemplates();
+        } else {
+          alert('Failed to submit template');
+        }
+      } catch (err) {
+        console.error('Error:', err);
+        alert('Error submitting template');
+      }
+    }
+
+    // Campaign submission
+    async function submitCampaign() {
+      const form = document.getElementById('campaignForm');
+      if (!form.checkValidity()) {
+        form.reportValidity();
+        return;
+      }
+
+      const data = {
+        name: document.getElementById('campaignName').value,
+        template_id: document.getElementById('campaignTemplate').value,
+        schedule_date: document.getElementById('campaignDate').value,
+        schedule_time: document.getElementById('campaignTime').value,
+        timezone: 'Asia/Kuala_Lumpur',
+        sheets_link: document.getElementById('campaignSheets').value
+      };
+
+      try {
+        const response = await fetch('/api/campaigns', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${currentToken}`
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (response.ok) {
+          closeModal('campaignModal');
+          form.reset();
+          await loadCampaigns();
+        } else {
+          alert('Failed to create campaign');
+        }
+      } catch (err) {
+        console.error('Error:', err);
+        alert('Error creating campaign');
+      }
+    }
+
+    // Load dashboard data
+    async function loadDashboardData() {
+      await Promise.all([loadAnalytics(), loadTemplates(), loadCampaigns()]);
+    }
+
+    async function loadAnalytics() {
+      try {
+        const response = await fetch('/api/analytics', {
+          headers: { 'Authorization': `Bearer ${currentToken}` }
+        });
+        if (response.ok) {
+          const data = await response.json();
+          document.getElementById('sentCount').textContent = data.sent || 0;
+          document.getElementById('readCount').textContent = data.read || 0;
+          document.getElementById('failCount').textContent = data.failed || 0;
+        }
+      } catch (err) {
+        console.error('Error loading analytics:', err);
+      }
+    }
+
+    async function loadTemplates() {
+      try {
+        const response = await fetch('/api/templates', {
+          headers: { 'Authorization': `Bearer ${currentToken}` }
+        });
+        if (response.ok) {
+          templates = await response.json();
+          renderTemplates();
+          populateCampaignTemplates();
+        }
+      } catch (err) {
+        console.error('Error loading templates:', err);
+      }
+    }
+
+    async function loadCampaigns() {
+      try {
+        const response = await fetch('/api/campaigns', {
+          headers: { 'Authorization': `Bearer ${currentToken}` }
+        });
+        if (response.ok) {
+          campaigns = await response.json();
+          renderCampaigns();
+        }
+      } catch (err) {
+        console.error('Error loading campaigns:', err);
+      }
+    }
+
+    // Render functions
+    function renderTemplates() {
+      // Implementation for rendering templates by status
+      console.log('Rendering templates:', templates);
+    }
+
+    function renderCampaigns() {
+      const body = document.getElementById('activeCampaignsBody');
+      if (campaigns.length === 0) {
+        body.innerHTML = '<tr><td colspan="6" style="text-align: center; color: #888;">No campaigns created yet</td></tr>';
+        return;
+      }
+
+      body.innerHTML = campaigns.map(campaign => `
+        <tr>
+          <td>${campaign.name}</td>
+          <td>${campaign.template_id}</td>
+          <td>${campaign.schedule_date} ${campaign.schedule_time}</td>
+          <td><span class="badge badge-${campaign.status}">${campaign.status}</span></td>
+          <td>${campaign.recipient_count || 0}</td>
+          <td>
+            <button class="btn btn-secondary btn-small">Edit</button>
+            <button class="btn btn-danger btn-small">Delete</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function populateCampaignTemplates() {
+      const approved = templates.filter(t => t.status === 'approved');
+      const select = document.getElementById('campaignTemplate');
+      select.innerHTML = '<option value="">Select an approved template</option>' +
+        approved.map(t => `<option value="${t.id}">${t.id}</option>`).join('');
+    }
+
+    function switchTemplateTab(tab) {
+      document.querySelectorAll('[data-template-tab]').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+    }
+
+    function toggleUserMenu() {
+      document.getElementById('userDropdown').classList.toggle('show');
+    }
+
+    async function logout() {
+      localStorage.removeItem('token');
+      localStorage.removeItem('client_id');
+      window.location.href = '/clients/login.html';
+    }
+  </script>
+</body>
+</html>
