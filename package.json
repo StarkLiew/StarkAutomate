@@ -3,6 +3,9 @@
 	"version": "1.0.0",
 	"type": "module",
 	"main": "main.js",
+	"engines": {
+       "node": "20.x"
+    },   
 	"dependencies": {
 		"mysql2": "^3.6.0"
 	},
