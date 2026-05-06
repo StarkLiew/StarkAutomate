@@ -5,8 +5,8 @@ const CORS = {
 };
 
 const WHATCHIMP_API_URL = 'https://app.whatchimp.com/api/v1';
-const DB_PROXY_URL = 'https://your-vercel-project.vercel.app/api/db-proxy'; // Update with your Vercel URL
-const DB_API_KEY = 'your-db-api-key'; // Set as environment variable
+const DB_PROXY_URL = 'https://stark-automate-git-main-starkprop86s-projects.vercel.app/api/db-proxy'; // Update with your Vercel URL
+const DB_API_KEY = '45nSIta1J83sjo2nVzmZk77UVMenaztZ'; // Set as environment variable
 
 // Database query helper
 async function queryDatabase(sqlQuery, params = []) {
