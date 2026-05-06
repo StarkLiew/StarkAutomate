@@ -5,6 +5,36 @@ const CORS = {
 };
 
 const WHATCHIMP_API_URL = 'https://app.whatchimp.com/api/v1';
+const DB_PROXY_URL = 'https://your-vercel-project.vercel.app/api/db-proxy'; // Update with your Vercel URL
+const DB_API_KEY = 'your-db-api-key'; // Set as environment variable
+
+// Database query helper
+async function queryDatabase(sqlQuery, params = []) {
+  try {
+    const response = await fetch(DB_PROXY_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-db-api-key': DB_API_KEY
+      },
+      body: JSON.stringify({
+        query: sqlQuery,
+        params: params
+      })
+    });
+
+    if (!response.ok) {
+      const error = await response.json();
+      throw new Error(`Database error: ${error.details || error.error}`);
+    }
+
+    const data = await response.json();
+    return data.rows || [];
+  } catch (err) {
+    console.error('Query error:', err);
+    throw err;
+  }
+}
 
 // MySQL Connection Config (from Infinity Free)
 const DB_CONFIG = {
@@ -15,6 +45,22 @@ const DB_CONFIG = {
   port: 3306
 };
 
+// Simple bcrypt-like password hashing using Web Crypto API
+// For production, integrate with a proper bcrypt library or use Argon2
+async function hashPassword(password) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(password);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  return Array.from(new Uint8Array(hashBuffer))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+}
+
+async function verifyPassword(password, hash) {
+  const passwordHash = await hashPassword(password);
+  return passwordHash === hash;
+}
+
 addEventListener('fetch', event => {
   event.respondWith(handle(event.request))
 })
@@ -23,6 +69,11 @@ async function handle(request){
   const url = new URL(request.url);
   if(request.method === 'OPTIONS'){
     return new Response(null, {status:204, headers: CORS})
+  }
+  
+  // Handle admin endpoints (create new client account)
+  if(url.pathname === '/api/admin/clients' && request.method === 'POST'){
+    return handleCreateClient(request);
   }
   
   // Handle authentication endpoints
@@ -170,17 +221,34 @@ async function handleLogin(request) {
         {status: 400, headers: {...CORS, 'Content-Type': 'application/json'}});
     }
 
-    // TODO: Query MySQL database to verify credentials
-    // For now, mock authentication - replace with real DB query
-    // Query: SELECT id, password_hash FROM clients WHERE email = ?
-    const clientId = 'client_' + Date.now();
-    const token = generateToken(clientId);
+    // Query database for client
+    const rows = await queryDatabase(
+      'SELECT id, password_hash FROM clients WHERE email = ?',
+      [email]
+    );
 
-    return new Response(JSON.stringify({token, client_id: clientId}), 
+    if (rows.length === 0) {
+      return new Response(JSON.stringify({error: 'Invalid credentials'}), 
+        {status: 401, headers: {...CORS, 'Content-Type': 'application/json'}});
+    }
+
+    // Verify password
+    const client = rows[0];
+    const passwordValid = await verifyPassword(password, client.password_hash);
+    
+    if (!passwordValid) {
+      return new Response(JSON.stringify({error: 'Invalid credentials'}), 
+        {status: 401, headers: {...CORS, 'Content-Type': 'application/json'}});
+    }
+
+    // Generate JWT token
+    const token = generateToken(client.id);
+
+    return new Response(JSON.stringify({token}), 
       {status: 200, headers: {...CORS, 'Content-Type': 'application/json'}});
   } catch (err) {
-    return new Response(JSON.stringify({error: 'Login failed'}), 
-      {status: 400, headers: {...CORS, 'Content-Type': 'application/json'}});
+    return new Response(JSON.stringify({error: 'Login failed', details: String(err)}), 
+      {status: 500, headers: {...CORS, 'Content-Type': 'application/json'}});
   }
 }
 
@@ -201,6 +269,64 @@ async function handleVerifyToken(request) {
     {status: 200, headers: {...CORS, 'Content-Type': 'application/json'}});
 }
 
+// ============ ADMIN HANDLERS ============
+
+async function handleCreateClient(request) {
+  try {
+    // TODO: In production, verify admin API key from headers
+    // const adminKey = request.headers.get('X-Admin-Key');
+    // if (adminKey !== ADMIN_SECRET) { return 403 Forbidden }
+    
+    const data = await request.json();
+    const {email, password, company_name} = data;
+
+    if (!email || !password || !company_name) {
+      return new Response(JSON.stringify({error: 'Email, password, and company_name required'}), 
+        {status: 400, headers: {...CORS, 'Content-Type': 'application/json'}});
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return new Response(JSON.stringify({error: 'Invalid email format'}), 
+        {status: 400, headers: {...CORS, 'Content-Type': 'application/json'}});
+    }
+
+    if (password.length < 8) {
+      return new Response(JSON.stringify({error: 'Password must be at least 8 characters'}), 
+        {status: 400, headers: {...CORS, 'Content-Type': 'application/json'}});
+    }
+
+    // Hash password
+    const passwordHash = await hashPassword(password);
+    const clientId = 'client_' + Date.now();
+
+    try {
+      // Insert into database
+      await queryDatabase(
+        'INSERT INTO clients (id, email, password_hash, company_name, created_at) VALUES (?, ?, ?, ?, NOW())',
+        [clientId, email, passwordHash, company_name]
+      );
+    } catch (dbErr) {
+      // Check for duplicate email
+      if (dbErr.message.includes('Duplicate')) {
+        return new Response(JSON.stringify({error: 'Email already exists'}), 
+          {status: 409, headers: {...CORS, 'Content-Type': 'application/json'}});
+      }
+      throw dbErr;
+    }
+
+    return new Response(JSON.stringify({
+      id: clientId,
+      email: email,
+      company_name: company_name,
+      message: 'Client created successfully'
+    }), {status: 201, headers: {...CORS, 'Content-Type': 'application/json'}});
+  } catch (err) {
+    return new Response(JSON.stringify({error: 'Failed to create client', details: String(err)}), 
+      {status: 500, headers: {...CORS, 'Content-Type': 'application/json'}});
+  }
+}
+
 // ============ TEMPLATES HANDLERS ============
 
 async function handleGetTemplates(request, token) {
@@ -211,14 +337,16 @@ async function handleGetTemplates(request, token) {
   }
 
   try {
-    // TODO: Query MySQL for templates
-    // Query: SELECT * FROM templates WHERE client_id = ? ORDER BY created_at DESC
-    const templates = [];
+    // Query MySQL for templates
+    const templates = await queryDatabase(
+      'SELECT * FROM templates WHERE client_id = ? ORDER BY created_at DESC',
+      [payload.client_id]
+    );
 
     return new Response(JSON.stringify(templates), 
       {status: 200, headers: {...CORS, 'Content-Type': 'application/json'}});
   } catch (err) {
-    return new Response(JSON.stringify({error: 'Failed to fetch templates'}), 
+    return new Response(JSON.stringify({error: 'Failed to fetch templates', details: String(err)}), 
       {status: 500, headers: {...CORS, 'Content-Type': 'application/json'}});
   }
 }
@@ -239,15 +367,18 @@ async function handleCreateTemplate(request, token) {
         {status: 400, headers: {...CORS, 'Content-Type': 'application/json'}});
     }
 
-    // TODO: Insert into MySQL templates table
-    // Query: INSERT INTO templates (client_id, purpose, message, cta, cta_url, attachment, status, created_at)
-    // VALUES (?, ?, ?, ?, ?, ?, 'pending', NOW())
     const templateId = 'tpl_' + Date.now();
+
+    // Insert into MySQL templates table
+    await queryDatabase(
+      'INSERT INTO templates (id, client_id, purpose, message, cta, cta_url, attachment, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, "pending", NOW())',
+      [templateId, payload.client_id, purpose, message, cta || null, cta_url || null, attachment || null]
+    );
 
     return new Response(JSON.stringify({id: templateId, status: 'pending'}), 
       {status: 201, headers: {...CORS, 'Content-Type': 'application/json'}});
   } catch (err) {
-    return new Response(JSON.stringify({error: 'Failed to create template'}), 
+    return new Response(JSON.stringify({error: 'Failed to create template', details: String(err)}), 
       {status: 500, headers: {...CORS, 'Content-Type': 'application/json'}});
   }
 }
@@ -262,14 +393,16 @@ async function handleGetCampaigns(request, token) {
   }
 
   try {
-    // TODO: Query MySQL for campaigns
-    // Query: SELECT * FROM campaigns WHERE client_id = ? ORDER BY created_at DESC
-    const campaigns = [];
+    // Query MySQL for campaigns with template details
+    const campaigns = await queryDatabase(
+      'SELECT c.*, t.message, t.purpose FROM campaigns c JOIN templates t ON c.template_id = t.id WHERE c.client_id = ? ORDER BY c.created_at DESC',
+      [payload.client_id]
+    );
 
     return new Response(JSON.stringify(campaigns), 
       {status: 200, headers: {...CORS, 'Content-Type': 'application/json'}});
   } catch (err) {
-    return new Response(JSON.stringify({error: 'Failed to fetch campaigns'}), 
+    return new Response(JSON.stringify({error: 'Failed to fetch campaigns', details: String(err)}), 
       {status: 500, headers: {...CORS, 'Content-Type': 'application/json'}});
   }
 }
@@ -290,15 +423,18 @@ async function handleCreateCampaign(request, token) {
         {status: 400, headers: {...CORS, 'Content-Type': 'application/json'}});
     }
 
-    // TODO: Insert into MySQL campaigns table
-    // Query: INSERT INTO campaigns (client_id, template_id, name, schedule_date, schedule_time, timezone, sheets_link, status, created_at)
-    // VALUES (?, ?, ?, ?, ?, ?, ?, 'scheduled', NOW())
     const campaignId = 'camp_' + Date.now();
+
+    // Insert into MySQL campaigns table
+    await queryDatabase(
+      'INSERT INTO campaigns (id, client_id, template_id, name, schedule_date, schedule_time, timezone, sheets_link, status, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, "scheduled", NOW())',
+      [campaignId, payload.client_id, template_id, name, schedule_date, schedule_time, timezone || null, sheets_link || null]
+    );
 
     return new Response(JSON.stringify({id: campaignId, status: 'scheduled'}), 
       {status: 201, headers: {...CORS, 'Content-Type': 'application/json'}});
   } catch (err) {
-    return new Response(JSON.stringify({error: 'Failed to create campaign'}), 
+    return new Response(JSON.stringify({error: 'Failed to create campaign', details: String(err)}), 
       {status: 500, headers: {...CORS, 'Content-Type': 'application/json'}});
   }
 }
@@ -313,21 +449,18 @@ async function handleGetAnalytics(request, token) {
   }
 
   try {
-    // TODO: Query MySQL for analytics
-    // Query: SELECT COUNT(CASE WHEN status='sent' THEN 1 END) as sent,
-    //               COUNT(CASE WHEN status='read' THEN 1 END) as read,
-    //               COUNT(CASE WHEN status='failed' THEN 1 END) as failed
-    //        FROM campaign_messages WHERE campaign_id IN (SELECT id FROM campaigns WHERE client_id = ?)
-    const analytics = {
-      sent: 0,
-      read: 0,
-      failed: 0
-    };
+    // Query MySQL for analytics
+    const result = await queryDatabase(
+      'SELECT COUNT(CASE WHEN cm.status="sent" THEN 1 END) as sent, COUNT(CASE WHEN cm.status="read" THEN 1 END) as read, COUNT(CASE WHEN cm.status="failed" THEN 1 END) as failed FROM campaign_messages cm WHERE cm.campaign_id IN (SELECT id FROM campaigns WHERE client_id = ?)',
+      [payload.client_id]
+    );
+
+    const analytics = result[0] || {sent: 0, read: 0, failed: 0};
 
     return new Response(JSON.stringify(analytics), 
       {status: 200, headers: {...CORS, 'Content-Type': 'application/json'}});
   } catch (err) {
-    return new Response(JSON.stringify({error: 'Failed to fetch analytics'}), 
+    return new Response(JSON.stringify({error: 'Failed to fetch analytics', details: String(err)}), 
       {status: 500, headers: {...CORS, 'Content-Type': 'application/json'}});
   }
 }

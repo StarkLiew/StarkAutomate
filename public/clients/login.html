@@ -220,7 +220,6 @@
              <img src="../logo.png" alt="Stark">
         </div>
         <h1 class="login-title">Client Portal</h1>
-        <p class="login-subtitle">Manage your campaigns & templates</p>
       </div>
 
       <form id="loginForm">
@@ -250,7 +249,7 @@
     // Theme toggle
     const themeToggle = document.getElementById('themeToggle');
     // const isDarkMode = localStorage.getItem('darkMode') === 'true';
-    const isDarkMode = true;
+    const isDarkMode = t
     if (isDarkMode) document.body.classList.add('dark-mode');
 
     themeToggle.addEventListener('click', () => {
