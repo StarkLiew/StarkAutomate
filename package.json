@@ -3,14 +3,13 @@
 	"version": "1.0.0",
 	"type": "module",
 	"dependencies": {
-		"pdfmake": "^0.3.7",
 		"mysql2": "^3.6.0"
 	},
 	"devDependencies": {
 		"vercel": "^31.0.0"
 	},
 	"scripts": {
-		"vercel-build": "echo 'Building for Vercel'"
+		"vercel-build": "echo 'Building Vercel serverless functions...'"
 	}
 }
 
