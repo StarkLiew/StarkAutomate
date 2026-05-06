@@ -2,6 +2,8 @@
   "buildCommand": "echo 'Building Vercel serverless functions...'",
   "outputDirectory": "public",
   "functions": {
-    "api/**/*.js": {}
+    "api/**/*.js": {
+          "memory": 1024
+    }
   }
 }
