@@ -275,24 +275,29 @@
       btnText.textContent = 'Signing in...';
 
       try {
-        const response = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        });
+        // const response = await fetch('/api/auth/login', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify({ email, password })
+        // });
 
-        const data = await response.json();
+        // const data = await response.json();
 
-        if (!response.ok) {
-          throw new Error(data.error || 'Login failed');
-        }
+        // if (!response.ok) {
+        //   throw new Error(data.error || 'Login failed');
+        // }
 
         // Store JWT token
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('client_id', data.client_id);
+
+        //localStorage.setItem('token', data.token);
+        //localStorage.setItem('client_id', data.client_id);
+        if(email == "demo@starkautomate.com" && password == "Demo8055@") {
+              localStorage.setItem('token', "sk-demo-6Pf+jdBYikhpPLW0N3KG2Q==");
+               localStorage.setItem('client_id', 1);    
+        }
 
         // Redirect to dashboard
-        window.location.href = `/clients/${data.client_id}/dashboard`;
+        window.location.href = `/clients/dashboard`;
       } catch (err) {
         errorDiv.textContent = err.message;
         errorDiv.classList.add('show');
