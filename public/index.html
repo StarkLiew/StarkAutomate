@@ -500,6 +500,77 @@
       .testi-grid{grid-template-columns:repeat(3,1fr)}
     }
 
+    /* StarkReach Section */
+    .starkreach-container{
+      background:linear-gradient(135deg,rgba(0,240,255,0.05),rgba(168,85,247,0.04));
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:32px 24px;
+      margin-top:16px;
+      text-align:center;
+    }
+    .starkreach-title{
+      font-family:'Orbitron',monospace;
+      font-size:1.6rem;
+      color:var(--accent);
+      margin:0 0 8px;
+      display:flex;align-items:center;justify-content:center;gap:8px;
+    }
+    .starkreach-title span{
+      font-size:0.75rem;letter-spacing:1px;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0.8;
+    }
+    .starkreach-desc{
+      font-size:0.95rem;color:var(--text);line-height:1.7;margin:16px 0 0;max-width:700px;margin-left:auto;margin-right:auto;
+    }
+    .starkreach-features{
+      display:grid;grid-template-columns:1fr;gap:12px;margin-top:20px;
+    }
+    .feature-badge{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(135deg,rgba(0,240,255,0.1),rgba(168,85,247,0.08));border:1px solid rgba(0,240,255,0.3);border-radius:20px;padding:8px 16px;font-size:0.85rem;color:var(--accent);
+    }
+    @media(min-width:800px){
+      .starkreach-features{grid-template-columns:repeat(3,1fr)}
+    }
+
+    /* KPI Counter Section */
+    .kpi-section{
+      background:linear-gradient(135deg,rgba(0,240,255,0.07),rgba(168,85,247,0.05));
+      border-top:1px solid var(--border);
+      border-bottom:1px solid var(--border);
+      padding:48px 24px;
+      margin-top:60px;margin-bottom:0;
+    }
+    .kpi-inner{
+      max-width:1000px;margin:0 auto;
+    }
+    .kpi-title{
+      font-family:'Orbitron',monospace;
+      font-size:1.4rem;text-align:center;color:var(--accent);
+      margin:0 0 32px;
+      letter-spacing:1px;
+    }
+    .kpi-grid{
+      display:grid;grid-template-columns:1fr;gap:24px;margin-bottom:0;
+    }
+    .kpi-card{
+      background:var(--card);border:1px solid var(--border);border-radius:14px;padding:32px 24px;text-align:center;transition:transform .3s,box-shadow .3s,border-color .3s;
+    }
+    .kpi-card:hover{
+      transform:translateY(-4px);border-color:var(--accent);box-shadow:var(--glow);
+    }
+    .kpi-number{
+      font-family:'Orbitron',monospace;
+      font-size:3.2rem;font-weight:700;color:var(--accent);margin:0 0 8px;
+      line-height:1;
+    }
+    .kpi-label{
+      font-family:'Orbitron',monospace;
+      font-size:0.9rem;letter-spacing:1.5px;color:var(--accent2);text-transform:uppercase;margin:0;
+    }
+    @media(min-width:800px){
+      .kpi-grid{grid-template-columns:repeat(3,1fr)}
+    }
+
     @media(min-width:800px){
       .grid{grid-template-columns:2fr 1fr}
       .hero h1{font-size:2.8rem}
@@ -560,6 +631,22 @@
             <div class="service-item"><strong>Robotic Business Automation (RBA / RPA):</strong> Automate repetitive business operations like accounting, reporting, data entry, approvals, and workflow processes.</div>
             <div class="service-item"><strong>Marketing Funnel & Landing Page System:</strong> Build high-converting landing pages, lead capture forms, automated follow-up funnels, and campaign tracking to turn traffic into customers.</div>
             <div class="service-item"><strong>WhatsApp & Telegram Automation:</strong> Chatbot, broadcasts, follow-ups, lead nurturing, appointment reminders, sales automation, auto form/survey processing, and lead routing.</div>
+          </div>
+        </div>
+
+        <div class="workflow-step">
+          <span class="step-number">02.5</span>
+          <div class="starkreach-container">
+            <h2 class="starkreach-title">📱 StarkReach<span>™</span></h2>
+            <p class="starkreach-desc">An intelligent omnichannel outreach solution designed for SMEs to reach customers via WhatsApp, Telegram, SMS, and email with automated, personalized messaging. StarkReach powers customer engagement through seamless broadcast campaigns, AI-driven chatbots, appointment reminders, and lead nurturing workflows—all from a single unified platform.</p>
+            <div class="starkreach-features">
+              <div class="feature-badge">AI Chatbots</div>
+              <div class="feature-badge">Bulk Broadcasting</div>
+              <div class="feature-badge">Smart Reminders</div>
+              <div class="feature-badge">Multi-Channel</div>
+              <div class="feature-badge">Lead Nurturing</div>
+              <div class="feature-badge">Analytics</div>
+            </div>
           </div>
         </div>
 
@@ -696,7 +783,7 @@
           <h2><span class="step-icon">🤝</span> Brands We Grow</h2>
           <p style="margin:0 0 12px">Trusted by forward-thinking businesses to deliver operational efficiency, automation, and digital transformation.</p>
           <div class="reference-grid">
-            <a class="reference-card" href="https://www.azadigital.my" target="_blank" rel="noreferrer noopener">
+                        <a class="reference-card" href="https://www.azadigital.my" target="_blank" rel="noreferrer noopener">
               <img src="client3.png" alt="Rockmart logo">
             </a>
             <a class="reference-card" href="https://www.leadersrealestatepm.com/" target="_blank" rel="noreferrer noopener">
@@ -771,6 +858,27 @@
       </div>
     </main>
 
+    <!-- KPI Section -->
+    <div class="kpi-section">
+      <div class="kpi-inner">
+        <h2 class="kpi-title">Our Impact</h2>
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-number" data-count="3">0</div>
+            <p class="kpi-label">Agencies</p>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-number" data-count="7">0</div>
+            <p class="kpi-label">Clients</p>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-number" data-count="100">+0</div>
+            <p class="kpi-label">Campaigns</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
   <footer>
@@ -822,6 +930,34 @@
       });
     },{threshold:0.2,rootMargin:'0px 0px -60px 0px'});
     steps.forEach(step=>observer.observe(step));
+
+    // KPI Counter Animation
+    const kpiObserver = new IntersectionObserver((entries)=>{
+      entries.forEach(entry=>{
+        if(entry.isIntersecting && !entry.target.classList.contains('counted')){
+          entry.target.classList.add('counted');
+          const cards = entry.target.querySelectorAll('.kpi-number');
+          cards.forEach(card=>{
+            const target = parseInt(card.dataset.count);
+            const duration = 2000;
+            const steps = 60;
+            const increment = target / steps;
+            let current = 0;
+            const timer = setInterval(()=>{
+              current += increment;
+              if(current >= target){
+                card.textContent = target;
+                clearInterval(timer);
+              }else{
+                card.textContent = Math.floor(current);
+              }
+            }, duration / steps);
+          });
+        }
+      });
+    },{threshold:0.3});
+    const kpiSection = document.querySelector('.kpi-section');
+    if(kpiSection) kpiObserver.observe(kpiSection);
 
     // Form submission
     const form = document.getElementById('enquiryForm');
