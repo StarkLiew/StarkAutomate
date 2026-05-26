@@ -872,7 +872,7 @@
             <p class="kpi-label">Clients</p>
           </div>
           <div class="kpi-card">
-            <div class="kpi-number" data-count="100">+0</div>
+            <div class="kpi-number" data-count="100">&gt;0</div>
             <p class="kpi-label">Campaigns</p>
           </div>
         </div>
@@ -943,10 +943,11 @@
             const steps = 60;
             const increment = target / steps;
             let current = 0;
+            const hasSymbol = card.innerHTML.includes('&gt;');
             const timer = setInterval(()=>{
               current += increment;
               if(current >= target){
-                card.textContent = target;
+                card.innerHTML = hasSymbol ? '&gt;' + target : target;
                 clearInterval(timer);
               }else{
                 card.textContent = Math.floor(current);
