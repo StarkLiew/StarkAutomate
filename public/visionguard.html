@@ -1,0 +1,669 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Stark VisionGuard – Automated Webpage Visual Monitoring &amp; Snapshot Comparison</title>
+  <meta name="description" content="Keep your websites pixel-perfect. Take snapshots, compare visual drift, and detect unauthorized changes or system rendering bugs automatically. Available soon on AppSumo.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --accent:#00f0ff;
+      --accent2:#a855f7;
+      --accent3:#f59e0b;
+      --bg:#0a0a0f;
+      --bg2:#12121a;
+      --card:#16161f;
+      --border:#2a2a3a;
+      --text:#e4e4eb;
+      --muted:#7a7a8c;
+      --glow:0 0 20px rgba(0,240,255,0.3);
+      --glow2:0 0 20px rgba(168,85,247,0.3);
+      --glow3:0 0 20px rgba(245,158,11,0.3);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Inter',system-ui,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      margin:0;
+      line-height:1.6;
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%,rgba(0,240,255,0.08),transparent),
+        radial-gradient(ellipse 60% 40% at 100% 100%,rgba(168,85,247,0.06),transparent);
+      background-attachment:fixed;
+    }
+    .container{max-width:1000px;margin:0 auto;padding:24px}
+
+    /* Header */
+    header{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px 0;
+      border-bottom:1px solid var(--border);
+      position:sticky;top:0;
+      background:rgba(10,10,15,0.85);
+      backdrop-filter:blur(12px);
+      z-index:100;
+    }
+    .brand{
+      display:flex;flex-direction:column;align-items:center;gap:4px;
+      text-decoration:none;
+    }
+    .brand img{
+      height:40px;width:auto;
+    }
+    .brand-tagline{
+      font-family:'Orbitron',monospace;
+      font-weight:700;font-size:0.75rem;letter-spacing:0.18em;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background-clip:text;
+      text-transform:uppercase;
+    }
+    nav a{
+      margin:0 10px;color:var(--muted);text-decoration:none;font-weight:500;
+      position:relative;transition:color .2s;
+    }
+    nav a:hover{color:var(--accent)}
+    nav a::after{
+      content:'';position:absolute;left:0;bottom:-4px;width:0;height:2px;
+      background:var(--accent);transition:width .25s;
+    }
+    nav a:hover::after{width:100%}
+    nav a.active{color:var(--accent)}
+    nav a.active::after{width:100%}
+
+    /* Hero */
+    .hero{
+      background:linear-gradient(135deg,rgba(0,240,255,0.08),rgba(168,85,247,0.06));
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:56px 32px;
+      margin-top:24px;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero h1{
+      font-family:'Orbitron',monospace;
+      font-size:2.5rem;margin:0 0 16px;
+      line-height:1.2;
+    }
+    .hero h1 span{
+      background:linear-gradient(90deg,var(--accent3),var(--accent2));
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      background-clip:text;
+    }
+    .hero p{
+      color:var(--muted);
+      max-width:700px;
+      margin:0 auto 24px;
+      font-size:1.1rem;
+    }
+    .badge{
+      display:inline-block;
+      font-family:'Orbitron',monospace;
+      font-size:0.75rem;
+      font-weight:600;
+      padding:6px 14px;
+      border-radius:20px;
+      background:rgba(245,158,11,0.1);
+      border:1px solid var(--accent3);
+      color:var(--accent3);
+      text-transform:uppercase;
+      letter-spacing:1px;
+      margin-bottom:16px;
+      box-shadow:var(--glow3);
+    }
+
+    /* Slider Container */
+    .slider-section {
+      margin-top:40px;
+      border: 1px solid var(--border);
+      border-radius:14px;
+      background: var(--bg2);
+      padding: 24px;
+      text-align: center;
+    }
+    .slider-title {
+      font-family:'Orbitron',monospace;
+      color: var(--accent);
+      margin: 0 0 8px;
+      font-size: 1.2rem;
+    }
+    .slider-desc {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin: 0 0 20px;
+    }
+    .comparison-container {
+      position: relative;
+      width: 100%;
+      max-width: 650px;
+      height: 350px;
+      margin: 0 auto;
+      overflow: hidden;
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      user-select: none;
+    }
+    .comparison-img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .comparison-img.before {
+      background: #111827;
+      color: #34d399;
+    }
+    .comparison-img.after {
+      background: #1e1b4b;
+      color: #f87171;
+    }
+    .img-label {
+      position: absolute;
+      top: 12px;
+      font-size: 0.75rem;
+      background: rgba(0,0,0,0.6);
+      padding: 4px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.15);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+    .before .img-label { left: 12px; color: #34d399; border-color: #34d399; }
+    .after .img-label { right: 12px; color: #f87171; border-color: #f87171; }
+
+    /* Webpage content simulation */
+    .web-mock {
+      width: 80%;
+      padding: 24px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      text-align: left;
+    }
+    .web-title {
+      height: 16px;
+      width: 45%;
+      background: rgba(255,255,255,0.2);
+      border-radius: 4px;
+      margin-bottom: 12px;
+    }
+    .before .web-title { background: #34d399; }
+    .after .web-title { background: #f87171; }
+
+    .web-line {
+      height: 8px;
+      width: 85%;
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+      margin-bottom: 8px;
+    }
+    .web-line.short { width: 60%; }
+    
+    .diff-box {
+      border: 1px dashed #f87171;
+      padding: 6px;
+      margin-top: 12px;
+      background: rgba(239,68,68,0.1);
+      border-radius: 4px;
+      color: #f87171;
+      font-size: 0.72rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Slider divider line and thumb */
+    .slider-handle {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--accent3);
+      z-index: 10;
+      cursor: ew-resize;
+    }
+    .slider-thumb {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 36px;
+      height: 36px;
+      background: var(--bg2);
+      border: 2px solid var(--accent3);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent3);
+      font-weight: bold;
+      font-size: 0.8rem;
+      box-shadow: 0 0 15px rgba(245,158,11,0.5);
+    }
+
+    /* Grid & Bento Cards */
+    .grid{display:grid;grid-template-columns:1fr;gap:20px;margin-top:40px}
+    @media(min-width:800px){
+      .grid{grid-template-columns:repeat(2,1fr)}
+    }
+
+    .card{
+      background:var(--card);
+      padding:32px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      position:relative;
+      overflow:hidden;
+      transition:transform .4s cubic-bezier(.25,.8,.25,1),box-shadow .4s,border-color .4s;
+    }
+    .card:hover{
+      transform:translateY(-4px);
+      box-shadow:var(--glow3);
+      border-color:var(--accent3);
+    }
+    .card h3{
+      font-family:'Orbitron',monospace;
+      color:var(--accent3);margin:0 0 12px;
+      font-size:1.2rem;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .card p{
+      color:var(--text);
+      font-size:0.95rem;
+      margin:0;
+      line-height:1.6;
+    }
+    .card-icon{
+      font-size:1.5rem;
+    }
+
+    /* Split Section */
+    .split-section{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:32px;
+      margin-top:56px;
+      align-items:start;
+    }
+    @media(min-width:800px){
+      .split-section{grid-template-columns:1.2fr 1fr}
+    }
+
+    .info-panel{
+      background:var(--bg2);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:32px;
+    }
+    .info-panel h2{
+      font-family:'Orbitron',monospace;
+      color:var(--accent3);
+      margin:0 0 20px;
+      font-size:1.6rem;
+    }
+    .info-panel ul{
+      padding-left:0;
+      margin:0;
+      list-style:none;
+    }
+    .info-panel li{
+      padding:10px 0;
+      color:var(--text);
+      display:flex;
+      gap:12px;
+      border-bottom:1px solid rgba(255,255,255,0.04);
+      font-size:0.95rem;
+    }
+    .info-panel li:last-child{border-bottom:0}
+    .info-panel li::before{
+      content:'✦';
+      color:var(--accent3);
+      flex-shrink:0;
+    }
+
+    /* Form */
+    .form-panel{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:32px;
+      box-shadow:0 0 30px rgba(245,158,11,0.03);
+    }
+    .form-panel h3{
+      font-family:'Orbitron',monospace;
+      color:var(--accent3);
+      margin:0 0 16px;
+      font-size:1.3rem;
+      text-align:center;
+    }
+    label{display:block;margin:12px 0 4px;font-size:0.9rem;color:var(--muted)}
+    input,select,textarea{
+      width:100%;padding:10px 12px;
+      background:var(--bg2);
+      border:1px solid var(--border);
+      border-radius:8px;
+      color:var(--text);
+      font-size:0.95rem;
+      transition:border-color .2s,box-shadow .2s;
+    }
+    input:focus,select:focus,textarea:focus{
+      outline:none;
+      border-color:var(--accent3);
+      box-shadow:0 0 0 3px rgba(245,158,11,0.15);
+    }
+    button{
+      width:100%;
+      background:linear-gradient(135deg,var(--accent3),var(--accent2));
+      color:#0a0a0f;font-weight:600;
+      border:0;padding:12px 20px;border-radius:8px;
+      cursor:pointer;transition:transform .2s,box-shadow .2s;
+      margin-top:16px;
+      font-size:1rem;
+    }
+    button:hover{transform:scale(1.02);box-shadow:var(--glow3)}
+    .phone-row{display:flex;gap:8px}
+    .phone-row select{width:110px;flex-shrink:0}
+    .phone-row input{flex:1}
+
+    .muted{color:var(--muted)}
+
+    /* Footer */
+    footer{
+      margin-top:60px;
+      background:var(--bg2);
+      border-top:1px solid var(--border);
+      padding:48px 24px 32px;
+    }
+    .footer-inner{
+      max-width:1000px;margin:0 auto;
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:32px;
+    }
+    .footer-col h4{
+      font-family:'Orbitron',monospace;
+      color:var(--accent);margin:0 0 16px;font-size:0.95rem;
+    }
+    .footer-col a{
+      display:block;color:var(--muted);text-decoration:none;
+      margin:8px 0;transition:color .2s;
+    }
+    .footer-col a:hover{color:var(--accent)}
+    .footer-bottom{
+      max-width:1000px;margin:32px auto 0;
+      text-align:center;color:var(--muted);font-size:0.85rem;
+      border-top:1px solid var(--border);padding-top:24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <a href="index.html" class="brand">
+        <img src="logo.png" alt="Stark">
+        <span class="brand-tagline">Automate</span>
+      </a>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="reach.html">StarkReach</a>
+        <a href="visionguard.html" class="active">VisionGuard</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="blog/index.html">Blog</a>
+        <a href="index.html#enquiry">Enquiry</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <span class="badge">Available Soon on AppSumo</span>
+        <h1>Visual drift protection with <span>VisionGuard</span></h1>
+        <p>A smart webpage visual monitoring platform that takes automated snapshots, compares layout changes, and alerts you instantly of system bugs or unauthorized alterations.</p>
+        <a href="#notify" style="display:inline-block;background:linear-gradient(135deg,var(--accent3),var(--accent2));color:#0a0a0f;font-weight:600;border:0;padding:12px 28px;border-radius:8px;text-decoration:none;transition:transform .2s,box-shadow .2s;margin-top:8px;">
+          Join AppSumo Notification List
+        </a>
+      </section>
+
+      <!-- Simulated comparison slider -->
+      <section class="slider-section">
+        <h2 class="slider-title">Snapshot Comparison Slider</h2>
+        <p class="slider-desc">Drag the slider to see how Stark VisionGuard compares high-resolution web canvases and flags visual deviations pixel-by-pixel.</p>
+        
+        <div class="comparison-container" id="sliderContainer">
+          <!-- Before side -->
+          <div class="comparison-img before">
+            <span class="img-label">Base Snapshot (Yesterday)</span>
+            <div class="web-mock">
+              <div class="web-title"></div>
+              <div class="web-line"></div>
+              <div class="web-line"></div>
+              <div class="web-line short"></div>
+              <div class="web-line"></div>
+            </div>
+          </div>
+          
+          <!-- After side (masked with custom slider) -->
+          <div class="comparison-img after" id="afterContainer" style="width: 50%;">
+            <span class="img-label">Latest Snapshot (Today)</span>
+            <div class="web-mock" style="width: 650px; padding: 24px; box-sizing: border-box; text-align: left;">
+              <div class="web-title"></div>
+              <div class="web-line"></div>
+              <!-- Changed line simulated -->
+              <div class="web-line" style="background:#ef4444; width:92%"></div>
+              <div class="web-line short"></div>
+              <div class="diff-box">
+                <span>⚠ Visual drift detected: 14% deviation</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Handle -->
+          <div class="slider-handle" id="sliderHandle" style="left: 50%;">
+            <div class="slider-thumb">↔</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Grid of key capabilities -->
+      <div class="grid">
+        <div class="card">
+          <h3><span class="card-icon">📸</span> Automated Snapshots</h3>
+          <p>Takes high-resolution full-page screenshots on customizable schedules (hourly, daily, weekly) with chrome headless clusters.</p>
+        </div>
+        <div class="card">
+          <h3><span class="card-icon">⚖</span> Pixel-Perfect Diffing</h3>
+          <p>Runs structural, text, and computer-vision canvas comparison checks to detect even 1-pixel design alignment deviations.</p>
+        </div>
+        <div class="card">
+          <h3><span class="card-icon">🚨</span> Real-Time Alarms</h3>
+          <p>Triggers immediate visual alerts to your Telegram, email, or Slack channel the second an issue is detected on your live webpages.</p>
+        </div>
+        <div class="card">
+          <h3><span class="card-icon">📊</span> Multi-Device Render Testing</h3>
+          <p>Inspects page health across desktop, mobile, and tablet viewport simulations to safeguard responsive scaling and layout.</p>
+        </div>
+      </div>
+
+      <!-- Split section with details and Enquiry -->
+      <div class="split-section" id="notify">
+        <div class="info-panel">
+          <h2>Why Use VisionGuard?</h2>
+          <p style="color:var(--muted);margin-bottom:20px;">Protect customer experiences, defend search ranking authority, and avoid developer design oversight.</p>
+          <ul>
+            <li><strong>Design Integrity Protection:</strong> Safeguard product landing pages from CSS breakages during updates.</li>
+            <li><strong>Unauthorised Change Audit:</strong> Detect web content defacements, malware modifications, or server errors immediately.</li>
+            <li><strong>AppSumo Lifetime Deal:</strong> Coming soon with special lifetime pricing tier. Secure your slot on the early notification list today!</li>
+            <li><strong>Detailed Change Highlighting:</strong> Visual side-by-side diff overlay marks exact alterations.</li>
+            <li><strong>Easy Setup:</strong> Simply input your URLs and select your notification frequency—no code integration required.</li>
+          </ul>
+        </div>
+
+        <div class="form-panel">
+          <h3>AppSumo Alert List</h3>
+          <p class="muted" style="text-align:center;font-size:0.85rem;margin-top:-8px;margin-bottom:20px;">Submit your email to lock in early lifetime pricing and receive our product launch updates.</p>
+          <form id="visionguardForm">
+            <label for="name">Contact person name</label>
+            <input id="name" name="name" required placeholder="e.g. Lina Tan">
+
+            <label for="company">Company name</label>
+            <input id="company" name="company" required placeholder="e.g. ABC Agency">
+
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" required placeholder="e.g. lina@abc.com">
+
+            <label for="phone">Phone number</label>
+            <div class="phone-row">
+              <select id="dialCode" name="dialCode" aria-label="International dialling code">
+                <option value="+60">🇲🇾 +60</option>
+                <option value="+65">🇸🇬 +65</option>
+                <option value="+1">🇺🇸 +1</option>
+              </select>
+              <input id="phone" name="phone" type="tel" placeholder="e.g. 12 345 6789">
+            </div>
+
+            <label for="message">Your Websites to Monitor</label>
+            <textarea id="message" name="message" rows="3" placeholder="Describe the pages you plan to monitor (optional)..."></textarea>
+
+            <button type="submit">Get Launch Notification</button>
+            <div id="status" class="muted" style="margin-top:12px;text-align:center;font-size:0.9rem;" aria-live="polite"></div>
+          </form>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-col">
+        <h4>Navigation</h4>
+        <a href="index.html">Home</a>
+        <a href="reach.html">StarkReach</a>
+        <a href="visionguard.html">VisionGuard</a>
+        <a href="pricing.html">Pricing</a>
+        <a href="blog/index.html">Blog</a>
+      </div>
+      <div class="footer-col">
+        <h4>Services</h4>
+        <a href="index.html#services">Process Automation</a>
+        <a href="index.html#services">AI Data Capture</a>
+        <a href="index.html#services">Workforce Optimisation</a>
+        <a href="index.html#services">Logistics Automation</a>
+      </div>
+      <div class="footer-col">
+        <h4>Locations</h4>
+        <p class="muted" style="margin:0">Kuala Lumpur</p>
+        <p class="muted" style="margin:4px 0">Johor Bahru</p>
+        <p class="muted" style="margin:4px 0">Singapore</p>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="index.html#enquiry">Send Enquiry</a>
+        <a href="terms-and-conditions">Terms of Service</a>
+        <a href="privacy-policy">Privacy Policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Stark Automate Solutions
+    </div>
+  </footer>
+
+  <script>
+    // Interactive Snapshot Comparison Slider Logic
+    const container = document.getElementById('sliderContainer');
+    const after = document.getElementById('afterContainer');
+    const handle = document.getElementById('sliderHandle');
+    
+    let isDragging = false;
+
+    function moveSlider(x) {
+      const rect = container.getBoundingClientRect();
+      let pos = (x - rect.left) / rect.width;
+      if (pos < 0) pos = 0;
+      if (pos > 1) pos = 1;
+      
+      after.style.width = (pos * 100) + '%';
+      handle.style.left = (pos * 100) + '%';
+    }
+
+    container.addEventListener('mousedown', (e) => {
+      isDragging = true;
+      moveSlider(e.clientX);
+    });
+
+    window.addEventListener('mouseup', () => {
+      isDragging = false;
+    });
+
+    window.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      moveSlider(e.clientX);
+    });
+
+    // Touch events for mobile support
+    container.addEventListener('touchstart', (e) => {
+      isDragging = true;
+      if (e.touches.length > 0) {
+        moveSlider(e.touches[0].clientX);
+      }
+    });
+
+    window.addEventListener('touchend', () => {
+      isDragging = false;
+    });
+
+    window.addEventListener('touchmove', (e) => {
+      if (!isDragging) return;
+      if (e.touches.length > 0) {
+        moveSlider(e.touches[0].clientX);
+      }
+    });
+
+    // Sign up / Enquiry form
+    const form = document.getElementById('visionguardForm');
+    const status = document.getElementById('status');
+    form.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      status.textContent = 'Registering interest...';
+      const data = {
+        name: form.name.value.trim(),
+        title: 'AppSumo Lead',
+        company: form.company.value.trim(),
+        email: form.email.value.trim(),
+        dialCode: form.dialCode.value,
+        phone: form.phone.value.trim(),
+        subject: 'visionguard',
+        message: 'AppSumo launch notification list. Website notes: ' + form.message.value.trim()
+      };
+      try{
+        const res = await fetch('/api', {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify(data)
+        });
+        const j = await res.json();
+        if(res.ok){
+          status.textContent = 'Success! We have added you to the Stark VisionGuard AppSumo alert list.';
+          form.reset();
+        } else {
+          status.textContent = j.error || 'Failed to submit. Please try again later.';
+        }
+      }catch(err){
+        console.error(err);
+        status.textContent = 'Network error. Please try again later.';
+      }
+    });
+  </script>
+</body>
+</html>
